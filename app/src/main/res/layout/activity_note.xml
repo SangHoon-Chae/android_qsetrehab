@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="30dp"
+    android:paddingLeft="30dp"
+    android:background="#FFFFFF"
+    tools:context=".Note">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id ="@+id/date"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_weight="1.18">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="7dp"
+    android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp">
+        </TextView>
+
+        <EditText
+            android:id="@+id/id_edit"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boxshape2">
+        </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/group"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp">
+        </TextView>
+
+        <EditText
+            android:id="@+id/group_edit"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boxshape2">
+        </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"></TextView>
+
+
+        <EditText
+            android:id="@+id/name_edit"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boxshape2"></EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id ="@+id/birth_date"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp">
+        </TextView>
+
+
+        <EditText
+            android:id ="@+id/birth_date_edit"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boxshape2"
+            >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+        <TextView
+            android:id ="@+id/gender"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:textSize="18sp"
+            android:layout_weight="0.40">
+        </TextView>
+
+
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="113dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton android:id="@+id/man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="남"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/woman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="여"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:id ="@+id/qol"
+            android:layout_width="268dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:weightSum="1">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_save"
+            android:text="Insert_DB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="SAVE_NOTE" />
+
+        <Button
+            android:id="@+id/button_clear"
+            android:text="CLEAR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            />
+    </LinearLayout>
+</LinearLayout>

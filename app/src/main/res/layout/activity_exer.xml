@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="11"
+    tools:context=".ExerActivity"
+    >
+
+    <LinearLayout
+        android:layout_weight="2"
+        android:id="@+id/linear1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/qsetrehab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="Postoperative Rehabilitation"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textColorHint="#00000000"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/accelerometerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="start"
+            android:text="Accelerometer Data (m/s-2)"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/qsetrehab" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints" >
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="end"
+                android:text="Ax:"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/accelerometerTitle" />
+
+            <TextView
+                android:id="@+id/label_accel_X"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="start"
+                android:text="-9.875"
+                android:textAlignment="textStart"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+                app:layout_constraintStart_toEndOf="@+id/textView5" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="end"
+                android:text="Ay:"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/label_accel_X"
+                app:layout_constraintStart_toEndOf="@+id/label_accel_X" />
+
+            <TextView
+                android:id="@+id/label_accel_Y"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="start"
+                android:text="-9.875"
+                android:textAlignment="textStart"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
+                app:layout_constraintStart_toEndOf="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="end"
+                android:text="Az:"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/label_accel_Y"
+                app:layout_constraintStart_toEndOf="@+id/label_accel_Y" />
+
+
+            <TextView
+                android:id="@+id/label_accel_Z"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="start"
+                android:text="-9.875"
+                android:textAlignment="textStart"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
+                app:layout_constraintStart_toEndOf="@+id/textView7" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_weight="8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints">
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/exerCount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elegantTextHeight="false"
+            android:fontFamily="@font/roboto_black"
+            android:layout_marginBottom="50dp"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chart1" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/end_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/roboto"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#000000"
+            android:textColorHint="#00000000"
+            android:textSize="18sp"
+            android:text="E N D"/>
+
+        <TextView
+            android:id="@+id/copyright"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center|end"
+            android:text="Copyrighted by UnuPapa"
+            android:textAlignment="textEnd"
+            android:textColor="#000000"
+            android:textColorHint="#00000000"
+            android:textSize="18sp" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="copyright" />
+    </LinearLayout>
+</LinearLayout>
