@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.snackbar.Snackbar;
@@ -42,9 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BarChart barChart;
     private TextView minuteTextview;
-
     ArrayList<Integer> jsonList = new ArrayList<>(); // ArrayList 선언
     ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
+
+
+
+    ArrayList<String> labelList2 = new ArrayList<>(); // ArrayList 선언
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.setTop(50);
         barChart.setBottom(0);
         barChart.setAutoScaleMinMaxEnabled(true);
-        barChart.getAxisRight().setAxisMaxValue(10);
-        barChart.getAxisLeft().setAxisMaxValue(10);
+//        barChart.getAxisLeft().setAxisMaxValue(80);
 //        barChart.getXAxis().setAxisMaximum((float) 30);
 
     }
@@ -169,40 +172,30 @@ public class MainActivity extends AppCompatActivity {
     private void BarChartGraph(ArrayList<String> labelList, ArrayList<Integer> valList) {
         // BarChart 메소드
 
+        labelList2.add("일");
+        labelList2.add("월");
+        labelList2.add("화");
+        labelList2.add("수");
+        labelList2.add("목");
+        labelList2.add("금");
+        labelList2.add("토");
+
         ArrayList<BarEntry> entries = new ArrayList<>();
         for (int i = 0; i < valList.size(); i++) {
-            entries.add(new BarEntry((Integer) valList.get(i), i));
+            entries.add(new BarEntry(i, (Integer) valList.get(i)));
         }
 
         BarDataSet depenses = new BarDataSet(entries, "일일 사용시간"); // 변수로 받아서 넣어줘도 됨
         depenses.setAxisDependency(YAxis.AxisDependency.LEFT);
 //        barChart.setDescription(" ");
-
-        ArrayList<String> labels = new ArrayList<String>();
-        for (int i = 0; i < labelList.size(); i++) {
-            labels.add((String) labelList.get(i));
-        }
-
 //        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
 //        dataSets.add((IBarDataSet) depenses);
         BarData data = new BarData (depenses);
 
-//        BarData data = new BarData(depenses); // 라이브러리 v3.x 사용하면 에러 발생함
-
-        final XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(){
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return "S";
-            }
-        });
-
- //       barChart.getAxisRight().setEnabled(false);
-        xAxis.setGranularityEnabled(true);
+        barChart.getAxisRight().setEnabled(false);
 
         depenses.setColors(ColorTemplate.LIBERTY_COLORS); //
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labelList));
 
         barChart.setData(data);
         barChart.animateXY(1000, 1000);
