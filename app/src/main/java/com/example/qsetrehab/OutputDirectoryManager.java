@@ -12,7 +12,6 @@ public class OutputDirectoryManager {
 
     // properties
     private final static String LOG_TAG = OutputDirectoryManager.class.getName();
-
     private String mOutputDirectory;
 
 

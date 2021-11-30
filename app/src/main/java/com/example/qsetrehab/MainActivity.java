@@ -46,10 +46,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> jsonList = new ArrayList<>(); // ArrayList 선언
     ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
 
-
-
-    ArrayList<String> labelList2 = new ArrayList<>(); // ArrayList 선언
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         jsonList.add(40);
         jsonList.add(50);
         jsonList.add(60);
-        jsonList.add(70);
+        jsonList.add(60);
 
 
         BarChartGraph(labelList, jsonList);
@@ -171,14 +167,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void BarChartGraph(ArrayList<String> labelList, ArrayList<Integer> valList) {
         // BarChart 메소드
-
-        labelList2.add("일");
-        labelList2.add("월");
-        labelList2.add("화");
-        labelList2.add("수");
-        labelList2.add("목");
-        labelList2.add("금");
-        labelList2.add("토");
 
         ArrayList<BarEntry> entries = new ArrayList<>();
         for (int i = 0; i < valList.size(); i++) {
