@@ -2,6 +2,7 @@ package com.example.qsetrehab;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     Button insert_information;
     Button status;
+    String exer;
+    String exerDate;
     Button rom;
     public static final String WIFE_STATE = "WIFE";
     public static final String MOBILE_STATE = "MOBILE";
@@ -132,9 +135,14 @@ public class MainActivity extends AppCompatActivity {
         return NONE_STATE;
     }
 
+
     public void graphInitSetting(){
 
-        labelList.add("일");
+        SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
+        exer = patientData.getString("exer1", null);
+        exerDate = patientData.getString("exerDate", null);
+
+        labelList.add(exerDate);
         labelList.add("월");
         labelList.add("화");
         labelList.add("수");
@@ -142,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         labelList.add("금");
         labelList.add("토");
 
-        jsonList.add(10);
+        jsonList.add(Integer.valueOf(exer));
         jsonList.add(20);
         jsonList.add(30);
         jsonList.add(40);
