@@ -56,7 +56,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 
 public class ExerActivity extends AppCompatActivity {
-
     // properties
 
     private final static String LOG_TAG = ExerActivity.class.getName();
@@ -143,6 +142,9 @@ public class ExerActivity extends AppCompatActivity {
         exer1 = patientData.getString("exer1", null);
         exeDate = patientData.getString("exerDate", null);
 
+        SharedPreferences exertype = getSharedPreferences("exer_data", MODE_PRIVATE);
+
+
         if (exeDate == null || !exeDate.equals(strDate))
             prevCount = 0;
         else
@@ -205,7 +207,6 @@ public class ExerActivity extends AppCompatActivity {
         pieChart.setData(pieData);
         Legend l = pieChart.getLegend();
         l.setTextSize(18f);
-
 
         pieData.setValueFormatter(new PercentFormatter());
         pieChart.setUsePercentValues(true);
@@ -318,7 +319,6 @@ public class ExerActivity extends AppCompatActivity {
 //        mLabelInterfaceTime = (TextView) findViewById(R.id.label_interface_time);
     }
 
-
     private void displayIMUSensorMeasurements() {
 
         // get IMU sensor measurements from IMUSession
@@ -339,14 +339,14 @@ public class ExerActivity extends AppCompatActivity {
                 mLabelAccelDataZ.setText(String.format(Locale.US, "%.3f", acce_data[2]));
 
                 // 완전히 펴고
-                if(Math.ceil(acce_data[2]) < 3) {
+                if(Math.ceil(acce_data[2]) < 2) {
                     if(trigger == 1) {
                         exerCount = exerCount + 1;
                         trigger = -1;
                     }
                 }
                 // 완전히 구부리고
-                else if(Math.ceil(acce_data[2]) >= 5){
+                else if(Math.ceil(acce_data[2]) >= 6){
                     if(trigger == -1) {
                         trigger = 1;
                     }
@@ -402,7 +402,6 @@ public class ExerActivity extends AppCompatActivity {
 
                 // RxJava does not accept null return value. Null will be treated as a failure.
                 // So just make it return true.
-
             }
         }) // Execute in IO thread, i.e. background thread.
                 .subscribeOn(Schedulers.newThread())
