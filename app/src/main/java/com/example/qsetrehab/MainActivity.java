@@ -49,7 +49,9 @@ import static io.reactivex.Completable.fromCallable;
 public class MainActivity extends AppCompatActivity {
     Button insert_information;
     Button status;
-    String exer;
+    String exer1;  //Q-set
+    String exer2;  //Walk
+    String exer3;  //Crab-walk
     String exerDate;
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
     public static final String WIFE_STATE = "WIFE";
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences exer_type = getSharedPreferences("exer_type", MODE_PRIVATE);
         SharedPreferences.Editor editor = exer_type.edit();
 
-        editor.putString("exer_type",String.valueOf(type));
+        editor.putString("exer",String.valueOf(type));
         editor.apply();
     }
 
@@ -155,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return NONE_STATE;
     }
-
-
 
     private void loadResultsBackground() {
         fromCallable(new Callable<Boolean>() {
@@ -207,15 +207,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void graphInitSetting(){
+        ArrayList<Integer> exer_count = new ArrayList<>();
+        int prevExerTotal;
 
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
-        exer = patientData.getString("exer1", null);
+        exer1 = patientData.getString("exer1", null);
+        exer2 = patientData.getString("exer2", null);
+        exer3 = patientData.getString("exer3", null);
+        if(exer1 == null)
+            exer_count.add(0,0);
+        else
+            exer_count.add(0,Integer.valueOf(exer1));
+
+        if(exer2 == null)
+            exer_count.add(1,0);
+        else
+            exer_count.add(1,Integer.valueOf(exer2));
+
+        if(exer3 == null)
+            exer_count.add(2,0);
+        else
+            exer_count.add(2,Integer.valueOf(exer3));
+
+        prevExerTotal = exer_count.get(0) + exer_count.get(1) +exer_count.get(2);
+
         exerDate = patientData.getString("exerDate", null);
         String exerDate2;
         String exerDate3;
 
-        if(exer == null)
-            exer = "0";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd", Locale.getDefault());
         Date date = new Date();
@@ -231,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         labelList.add(exerDate2);
         labelList.add(exerDate3);
 
-        jsonList.add(Integer.valueOf(exer));
+        jsonList.add(prevExerTotal);
         jsonList.add(20);
         jsonList.add(30);
 
@@ -274,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labelList));
 
         barChart.setData(data);
-        barChart.animateXY(1000, 1000);
+        barChart.animateXY(500, 500);
         barChart.invalidate();
     }
 

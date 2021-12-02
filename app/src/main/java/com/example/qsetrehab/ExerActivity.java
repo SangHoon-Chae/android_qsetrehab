@@ -100,7 +100,9 @@ public class ExerActivity extends AppCompatActivity {
     private int trigger = -1;
     private boolean upCount;
     private PieChart pieChart;
-    private String exer1;
+    private String whichExer;
+    private String exCount;
+
     private String exeDate;
 
 
@@ -120,6 +122,28 @@ public class ExerActivity extends AppCompatActivity {
         Date date = new Date();
         strDate = dateFormat.format(date);
 
+        //선택 운동확인
+        SharedPreferences exerType = getSharedPreferences("exer_type", MODE_PRIVATE);
+        whichExer = exerType.getString("exer", null);
+
+        //선택 운동개수확인
+        SharedPreferences exer_count = getSharedPreferences("exer_data", MODE_PRIVATE);
+        if(whichExer.equals("0")) {
+            exCount = exer_count.getString("exer1", null);
+            exeDate = exer_count.getString("exerDate", null);
+            if (exCount == null)
+                exCount = "0";
+        } else if(whichExer.equals("1")) {
+            exCount = exer_count.getString("exer2", null);
+            exeDate = exer_count.getString("exerDate", null);
+            if (exCount == null)
+                exCount = "0";
+        } else if(whichExer.equals("2")) {
+            exCount = exer_count.getString("exer3", null);
+            exeDate = exer_count.getString("exerDate", null);
+            if (exCount == null)
+                exCount = "0";
+        }
         //php에서 저장값 가져오는 주소 설정
         String urlPhp = "http://143.248.66.229/getExerCount.php?ID=".concat(String.valueOf(subj_id));
         link = urlPhp;
@@ -138,17 +162,11 @@ public class ExerActivity extends AppCompatActivity {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "sensors_data_logger:wakelocktag");
         mWakeLock.acquire();
 
-        SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
-        exer1 = patientData.getString("exer1", null);
-        exeDate = patientData.getString("exerDate", null);
-
-        SharedPreferences exertype = getSharedPreferences("exer_data", MODE_PRIVATE);
-
 
         if (exeDate == null || !exeDate.equals(strDate))
             prevCount = 0;
         else
-            prevCount = Integer.valueOf(exer1);
+            prevCount = Integer.valueOf(exCount);
 
         // monitor various sensor measurements
         displayIMUSensorMeasurements();
@@ -454,9 +472,21 @@ public class ExerActivity extends AppCompatActivity {
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = patientData.edit();
 
-        editor.putString("exer1",String.valueOf(exerCount+prevCount));
-        editor.putString("exerDate",strDate);
-        editor.apply();
+        if(whichExer.equals("0")) {
+            editor.putString("exer1",String.valueOf(exerCount+prevCount));
+            editor.putString("exerDate",strDate);
+            editor.apply();
+        }
+        else if(whichExer.equals("1")) {
+            editor.putString("exer2",String.valueOf(exerCount+prevCount));
+            editor.putString("exerDate",strDate);
+            editor.apply();
+        }
+        else if(whichExer.equals("2")) {
+            editor.putString("exer3",String.valueOf(exerCount+prevCount));
+            editor.putString("exerDate",strDate);
+            editor.apply();
+        }
 
         finish();
     }
