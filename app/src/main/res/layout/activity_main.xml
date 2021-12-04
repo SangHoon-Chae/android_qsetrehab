@@ -45,63 +45,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight = "1"
-        android:clickable="true"
-        android:orientation="horizontal"
-        >
+        android:layout_weight="1"
+        android:clickable="true">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exerList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="30sp"
-            android:paddingBottom="30sp"
-            android:layout_weight = "1"
-            android:clickable="true"
-            android:background="@drawable/exer1"
-            android:onClick="Exer_qset"
-            android:orientation="vertical"
-            >
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:adjustViewBounds="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight = "1"
-            android:clickable="true"
-            android:orientation="vertical"
-            android:background="@drawable/exer2"
-            >
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="Exer_walk"
-                android:paddingRight="5sp"
-                android:layout_weight = "2"
-                android:adjustViewBounds = "true"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight = "1"
-            android:clickable="true"
-            android:orientation="vertical"
-            android:background="@drawable/exer3"
-            >
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="Exer_crab"
-                android:paddingRight="5sp"
-                android:layout_weight = "2"
-                android:adjustViewBounds = "true"/>
-        </LinearLayout>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,12 +59,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            app:srcCompat="@android:drawable/ic_secure" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

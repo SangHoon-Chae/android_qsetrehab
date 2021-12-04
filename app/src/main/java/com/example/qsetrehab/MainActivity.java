@@ -1,5 +1,6 @@
 package com.example.qsetrehab;
 
+import android.bluetooth.le.AdvertisingSetParameters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,11 +10,14 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qsetrehab.databinding.ActivityMainBinding;
 import com.github.mikephil.charting.charts.BarChart;
@@ -34,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
@@ -53,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
     String exer2;  //Walk
     String exer3;  //Crab-walk
     String exerDate;
+    RecyclerView exerList;
+    List<String> titles;
+    List<Integer> images;
+    Adapter adapter;
+
+
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
     public static final String WIFE_STATE = "WIFE";
     public static final String MOBILE_STATE = "MOBILE";
@@ -70,12 +81,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exer);
+        setContentView(R.layout.activity_main);
+        exerList = findViewById(R.id.exerList);
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
+
+        titles = new ArrayList<>();
+        images = new ArrayList<>();
+
+        titles.add("Q-set");
+        titles.add("Q-Walk");
+        titles.add("Side-Walk");
+
+        images.add(R.drawable.exer1);
+        images.add(R.drawable.exer2);
+        images.add(R.drawable.exer3);
+
+        adapter = new Adapter(this, titles, images);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        exerList.setLayoutManager(gridLayoutManager);
+        exerList.setAdapter(adapter);
 
         barChart = (BarChart) findViewById(R.id.chartBar);
         graphInitSetting();       //그래프 기본 세팅
@@ -102,17 +132,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ExerActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Note.class);
-                startActivity(intent);
-
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
     }
@@ -158,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         return NONE_STATE;
     }
 
+    /*
     private void loadResultsBackground() {
         fromCallable(new Callable<Boolean>() {
             @Override
@@ -205,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                 // execute this RxJava
                 .subscribe();
     }
+    */
 
     public void graphInitSetting(){
         ArrayList<Integer> exer_count = new ArrayList<>();
