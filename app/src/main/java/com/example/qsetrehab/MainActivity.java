@@ -82,33 +82,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        exerList = findViewById(R.id.exerList);
+        exerList = findViewById(R.id.exList);
 
-
+        //ToolBar
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.toolbar);
 
+        //BarChart
+
+        barChart = (BarChart) findViewById(R.id.chartBar);
+        graphInitSetting();       //그래프 기본 세팅
+
+        //ExerChoice
         titles = new ArrayList<>();
         images = new ArrayList<>();
 
         titles.add("Q-set");
         titles.add("Q-Walk");
         titles.add("Side-Walk");
+        titles.add("Q-set");
+        titles.add("Q-Walk");
+        titles.add("Side-Walk");
 
-        images.add(R.drawable.exer1);
+        images.add(R.drawable.ic_add_to_photos_black_48dp);
         images.add(R.drawable.exer2);
         images.add(R.drawable.exer3);
+        images.add(R.drawable.exer1);
+        images.add(R.drawable.ic_baseline_accessibility_24);
+        images.add(R.drawable.ic_add_to_photos_black_48dp);
 
         adapter = new Adapter(this, titles, images);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         exerList.setLayoutManager(gridLayoutManager);
         exerList.setAdapter(adapter);
-
-        barChart = (BarChart) findViewById(R.id.chartBar);
-        graphInitSetting();       //그래프 기본 세팅
 
         insert_information= (Button) findViewById(R.id.button_user);
         status= (Button) findViewById(R.id.button_status);

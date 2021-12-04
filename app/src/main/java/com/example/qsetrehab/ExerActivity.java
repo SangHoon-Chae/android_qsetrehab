@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.qsetrehab.databinding.ActivityMainBinding;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -161,7 +160,6 @@ public class ExerActivity extends AppCompatActivity {
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "sensors_data_logger:wakelocktag");
         mWakeLock.acquire();
-
 
         if (exeDate == null || !exeDate.equals(strDate))
             prevCount = 0;
