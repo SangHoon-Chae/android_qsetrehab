@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String NONE_STATE = "NONE";
     private boolean newtwork = true;
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+//    private ActivityMainBinding binding;
     private BarChart barChart;
     private String urlPhp = "http://143.248.66.229/getExerCount.php?ID=".concat(String.valueOf(7));
     private String link;
@@ -83,12 +83,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         exerList = findViewById(R.id.exList);
         exerList.setHasFixedSize(false);
-
+/*
         //ToolBar
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
-
+*/
         //BarChart
         barChart = (BarChart) findViewById(R.id.chartBar);
         graphInitSetting();       //그래프 기본 세팅
@@ -100,25 +100,19 @@ public class MainActivity extends AppCompatActivity {
         titles.add("Q-set");
         titles.add("Q-Walk");
         titles.add("Side-Walk");
-        titles.add("Q-set");
-        titles.add("Q-Walk");
-        titles.add("Side-Walk");
 
-        images.add(R.drawable.ic_add_to_photos_black_48dp);
+        images.add(R.drawable.exer1);
         images.add(R.drawable.exer2);
         images.add(R.drawable.exer3);
-        images.add(R.drawable.exer1);
-        images.add(R.drawable.ic_baseline_accessibility_24);
-        images.add(R.drawable.ic_add_to_photos_black_48dp);
 
         adapter = new Adapter(this, titles, images);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         exerList.setLayoutManager(gridLayoutManager);
         exerList.setAdapter(adapter);
 
-        insert_information= (Button) findViewById(R.id.button_user);
-        status= (Button) findViewById(R.id.button_status);
+//        insert_information= (Button) findViewById(R.id.button_user);
+//        status= (Button) findViewById(R.id.button_status);
 
         String getNetwork =  getWhatKindOfNetwork(getApplication());
 
@@ -126,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             newtwork = false;
             Toast.makeText(getApplicationContext(), "인터넷연결을 확인하세요.", Toast.LENGTH_SHORT).show();
         }
-
+/*
         insert_information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        */
     }
 
     public void Exer_qset(View v) {

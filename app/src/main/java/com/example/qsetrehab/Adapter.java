@@ -49,13 +49,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            titles = itemView.findViewById(R.id.textView2);
+            title = itemView.findViewById(R.id.textView2);
             gridIcon = itemView.findViewById(R.id.imageView2);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked - >", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "Clicked - >" + title.getText(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
