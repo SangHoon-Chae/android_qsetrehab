@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     List<Integer> images;
     Adapter adapter;
 
-
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
     public static final String WIFE_STATE = "WIFE";
     public static final String MOBILE_STATE = "MOBILE";
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         exerList = findViewById(R.id.exList);
+        exerList.setHasFixedSize(false);
 
         //ToolBar
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         //BarChart
-
         barChart = (BarChart) findViewById(R.id.chartBar);
         graphInitSetting();       //그래프 기본 세팅
 

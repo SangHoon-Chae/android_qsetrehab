@@ -26,15 +26,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     @NonNull
-    @android.support.annotation.NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull @android.support.annotation.NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.custom_grid_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @android.support.annotation.NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.title.setText(titles.get(position));
         holder.gridIcon.setImageResource(images.get(position));
     }
