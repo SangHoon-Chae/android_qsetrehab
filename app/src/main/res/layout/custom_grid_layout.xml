@@ -32,7 +32,6 @@
                 android:id="@+id/imageView2"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-
                 tools:srcCompat="@drawable/exer1" />
 
             <TextView
@@ -42,7 +41,5 @@
                 android:text="TextView" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

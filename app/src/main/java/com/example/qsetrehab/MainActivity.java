@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qsetrehab.databinding.ActivityMainBinding;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -277,14 +279,25 @@ public class MainActivity extends AppCompatActivity {
         jsonList.add(20);
         jsonList.add(30);
 
+
         BarChartGraph(labelList, jsonList);
-        barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
         //barChart.setRendererLeftYAxis();
         barChart.setMaxVisibleValueCount(50);
-        barChart.setTop(300);
-        barChart.setBottom(0);
-        barChart.setAutoScaleMinMaxEnabled(true);
-//        barChart.getAxisLeft().setAxisMaxValue(80);
+  //      barChart.setTop(0);
+//        barChart.setBottom(0);
+        barChart.setAutoScaleMinMaxEnabled(false);
+        barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
+
+        barChart.getAxisLeft().setAxisMaxValue(300);
+
+        LimitLine ll1 = new LimitLine(150f, "목표 수치");
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll1.setTextSize(20f);
+//        ll1.setTypeface(tf);
+
+        barChart.getAxisLeft().addLimitLine(ll1);
 //        barChart.getXAxis().setAxisMaximum((float) 30);
     }
     /**
