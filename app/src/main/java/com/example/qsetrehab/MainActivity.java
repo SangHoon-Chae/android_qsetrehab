@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -30,6 +31,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
@@ -43,6 +45,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+
+import android.view.MenuItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.client.HttpClient;
@@ -112,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         exerList.setLayoutManager(gridLayoutManager);
         exerList.setAdapter(adapter);
+
+        initBottom_menu();
 
 //        insert_information= (Button) findViewById(R.id.button_user);
 //        status= (Button) findViewById(R.id.button_status);
@@ -331,6 +338,33 @@ public class MainActivity extends AppCompatActivity {
         barChart.setData(data);
         barChart.animateXY(500, 500);
         barChart.invalidate();
+    }
+
+    public void initBottom_menu (){
+//        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
+        BottomNavigationView bottom_menu = findViewById(R.id.bottom_menu);
+        bottom_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.first_tab:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
+                        Toast.makeText(getApplicationContext(), "Bottom_menu_Clicked - >1", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.second_tab:
+                        Toast.makeText(getBaseContext(), "Bottom_menu_Clicked - >2", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(.getContext(), "Bottom_menu_Clicked - >2", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.third_tab:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, greenFragment).commit();
+                        return true;
+                    case R.id.fourth_tab:
+  //                      getSupportFragmentManager().beginTransaction().replace(R.id.container, purpleFragment).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void onBackPressed() {

@@ -21,7 +21,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.QsetRehab.PopupOverlay"
             android:layout_gravity="center_horizontal"
-            app:title="재활 운동 기록" />
+            app:title="지역 사회 재활 운동" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,22 +33,53 @@
             android:id="@+id/chartBar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/exList"
-            app:layout_constraintLeft_toLeftOf="@+id/exList"
+            app:layout_constraintBottom_toTopOf="@id/exerText"
+            app:layout_constraintLeft_toLeftOf="@+id/exerText"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="70" />
+            app:layout_constraintVertical_weight="60" />
+
+        <TextView
+            android:id="@+id/exerText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="운동 선택을 선택해 주세요"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/exList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartBar"
+            app:layout_constraintVertical_weight="10"
+            android:gravity="center_horizontal|center_vertical">
+        </TextView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginEnd="9dp"
-            android:layout_marginRight="9dp"
             android:nestedScrollingEnabled="false"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerText"
+            app:layout_constraintVertical_weight="20" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_menu"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="false"
+            android:background="#345E86"
+            app:itemIconTint="#FFFFFF"
+            app:itemTextColor="#f6d170"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartBar"
-            app:layout_constraintVertical_weight="30" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exList"
+            app:layout_constraintVertical_weight="10" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
 
