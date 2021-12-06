@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String NONE_STATE = "NONE";
     private boolean newtwork = true;
     private AppBarConfiguration appBarConfiguration;
-//    private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
     private BarChart barChart;
     private String urlPhp = "http://143.248.66.229/getExerCount.php?ID=".concat(String.valueOf(7));
     private String link;
@@ -83,12 +83,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         exerList = findViewById(R.id.exList);
         exerList.setHasFixedSize(false);
-/*
+
         //ToolBar
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+//        setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
-*/
+
         //BarChart
         barChart = (BarChart) findViewById(R.id.chartBar);
         graphInitSetting();       //그래프 기본 세팅
@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
         //barChart.setRendererLeftYAxis();
         barChart.setMaxVisibleValueCount(50);
-        barChart.setTop(50);
+        barChart.setTop(300);
         barChart.setBottom(0);
         barChart.setAutoScaleMinMaxEnabled(true);
 //        barChart.getAxisLeft().setAxisMaxValue(80);
