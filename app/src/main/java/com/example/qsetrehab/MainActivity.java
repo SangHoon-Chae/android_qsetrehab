@@ -1,5 +1,7 @@
 package com.example.qsetrehab;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import android.bluetooth.le.AdvertisingSetParameters;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -37,7 +41,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,12 +65,18 @@ public class MainActivity extends AppCompatActivity {
     String exer1;  //Q-set
     String exer2;  //Walk
     String exer3;  //Crab-walk
-    String exerDate;
+    String exerDate;   //오늘
+    String exerDate2;  //어제
+    String exerDate3;  //그저께
+
     RecyclerView exerList;
     List<String> titles;
     List<Integer> images;
     Adapter adapter;
-    private int prevExerTotal;
+    private int prevExerTotal = 0;
+    private int prevExerTotal2 = 0;
+    private int prevExerTotal3 = 0;
+
 
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
     public static final String WIFE_STATE = "WIFE";
@@ -79,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> jsonList = new ArrayList<>(); // ArrayList 선언
     ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
-
         jsonList.clear();
 
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
@@ -177,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
         prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
 
         jsonList.add(prevExerTotal);
-        jsonList.add(20);
-        jsonList.add(30);
+        jsonList.add(prevExerTotal2);
+        jsonList.add(prevExerTotal3);
         BarChartGraph(labelList, jsonList);
     }
 
@@ -233,14 +246,61 @@ public class MainActivity extends AppCompatActivity {
     */
 
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void graphInitSetting(){
         ArrayList<Integer> exer_count = new ArrayList<>();
+        String exDate;
+
+        // 최근 3일 데이터를 sharedpreference 저장소에 저장
+        // 오늘 날짜 - exerDate 해서 1 or 2 일 경우 exerDate2, exerDate3 에 exerData 저장, 그 이상은 버림.
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        Date date2 = new Date();
 
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
         exer1 = patientData.getString("exer1", null);
         exer2 = patientData.getString("exer2", null);
         exer3 = patientData.getString("exer3", null);
+        exDate = patientData.getString("exerDate", null);
+
+        Calendar c = Calendar.getInstance();
+        exerDate = dateFormat.format(c.getTime());
+        c.add(Calendar.DATE, -1);
+        exerDate2 = dateFormat.format(c.getTime());
+        c.add(Calendar.DATE, -1);
+        exerDate3 = dateFormat.format(c.getTime());
+
+        ParsePosition pos = new ParsePosition(0);
+        date = dateFormat.parse(exDate,pos);
+//        date2 = dateFormat.parse (exerDate,pos);
+
+        long dayDiff = date.getTime() - date2.getTime();
+        int hours = (int)(dayDiff/(60*60*1000));
+        int days = hours/24;
+
+        if(days == 0) {
+            prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
+        }
+        else if (days == 1){
+            exer1=null;
+            exer2=null;
+            exer3=null;
+            prevExerTotal2 = prevExerTotal;
+        }
+        else if (days == 2){
+            exer1=null;
+            exer2=null;
+            exer3=null;
+            prevExerTotal3 = prevExerTotal;
+        }
+        else {
+            exer1=null;
+            exer2=null;
+            exer3=null;
+        }
+
+        // Exercise data 가 비어있을 경우 0 을 입력
         if(exer1 == null)
             exer_count.add(0,0);
         else
@@ -256,30 +316,14 @@ public class MainActivity extends AppCompatActivity {
         else
             exer_count.add(2,Integer.valueOf(exer3));
 
-        prevExerTotal = exer_count.get(0) + exer_count.get(1) +exer_count.get(2);
 
-        exerDate = patientData.getString("exerDate", null);
-        String exerDate2;
-        String exerDate3;
-
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd", Locale.getDefault());
-        Date date = new Date();
-        Date date2 = new Date();
-        Calendar c = Calendar.getInstance();
-        exerDate = dateFormat.format(c.getTime());
-        c.add(Calendar.DATE, -1);
-        exerDate2 = dateFormat.format(c.getTime());
-        c.add(Calendar.DATE, -1);
-        exerDate3 = dateFormat.format(c.getTime());
-
-        labelList.add(exerDate);
-        labelList.add(exerDate2);
-        labelList.add(exerDate3);
+        labelList.add("오 늘");
+        labelList.add("하루전");
+        labelList.add("이틀전");
 
         jsonList.add(prevExerTotal);
-        jsonList.add(20);
-        jsonList.add(30);
+        jsonList.add(prevExerTotal2);
+        jsonList.add(prevExerTotal3);
 
         BarChartGraph(labelList, jsonList);
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~

@@ -229,10 +229,15 @@ public class ExerActivity extends AppCompatActivity {
         pieChart.setUsePercentValues(true);
 
         pieChart.getDescription().setText(" ");
-        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        if(whichExer.equals("0"))
+            pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        if(whichExer.equals("1"))
+            pieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
+        if(whichExer.equals("2"))
+            pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+
         pieData.setValueTextSize(30f);
         pieData.setValueTextColor(Color.WHITE);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
