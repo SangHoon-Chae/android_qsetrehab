@@ -10,13 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
@@ -56,19 +60,24 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             super(itemView);
             title = itemView.findViewById(R.id.textView2);
             gridIcon = itemView.findViewById(R.id.imageView2);
+            Intent intent = new Intent(itemView.getContext(),
+                    ExerActivity.class);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     switch (title.getText().toString()) {
                         case "Q-set":
-                            Toast.makeText(v.getContext(), "Clicked -1"+ title.getText().toString(), Toast.LENGTH_SHORT).show();
+                            exer_setting(0);
+                            itemView.getContext().startActivity(intent);
                             break;
                         case "Q-Walk":
-                            Toast.makeText(v.getContext(), "Clicked -2"+title.getText().toString(), Toast.LENGTH_SHORT).show();
+                            exer_setting(1);
+                            itemView.getContext().startActivity(intent);
                             break;
                         case "Side-Walk":
-                            Toast.makeText(v.getContext(), "Clicked -3"+title.getText().toString(), Toast.LENGTH_SHORT).show();
+                            exer_setting(2);
+                            itemView.getContext().startActivity(intent);
                             break;
                         default:
                             break;
@@ -99,15 +108,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
             startActivity(intent);
         }
-
+    */
         public void exer_setting(int type){
-            SharedPreferences exer_type = getSharedPreferences("exer_type", MODE_PRIVATE);
+            SharedPreferences exer_type = itemView.getContext().getSharedPreferences("exer_type", MODE_PRIVATE);
             SharedPreferences.Editor editor = exer_type.edit();
 
             editor.putString("exer",String.valueOf(type));
             editor.apply();
         }
-    }
-    */
     }
 }

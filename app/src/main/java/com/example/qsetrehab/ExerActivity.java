@@ -44,6 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.reactivex.Completable.fromCallable;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;

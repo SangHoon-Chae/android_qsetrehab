@@ -4,13 +4,13 @@ import android.bluetooth.le.AdvertisingSetParameters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -31,7 +31,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
@@ -46,9 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
-import android.view.MenuItem;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
@@ -59,8 +55,6 @@ import io.reactivex.schedulers.Schedulers;
 import static io.reactivex.Completable.fromCallable;
 
 public class MainActivity extends AppCompatActivity {
-    Button insert_information;
-    Button status;
     String exer1;  //Q-set
     String exer2;  //Walk
     String exer3;  //Crab-walk
@@ -69,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     List<String> titles;
     List<Integer> images;
     Adapter adapter;
+    private int prevExerTotal;
 
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
     public static final String WIFE_STATE = "WIFE";
@@ -118,33 +113,13 @@ public class MainActivity extends AppCompatActivity {
         exerList.setLayoutManager(gridLayoutManager);
         exerList.setAdapter(adapter);
 
-        initBottom_menu();
-
-//        insert_information= (Button) findViewById(R.id.button_user);
-//        status= (Button) findViewById(R.id.button_status);
-
         String getNetwork =  getWhatKindOfNetwork(getApplication());
 
         if(getNetwork.equals("NONE")){
             newtwork = false;
             Toast.makeText(getApplicationContext(), "인터넷연결을 확인하세요.", Toast.LENGTH_SHORT).show();
         }
-/*
-        insert_information.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ExerActivity.class);
-                startActivity(intent);
-            }
-        });
-        status.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ExerActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
+
     }
 
     public void Exer_qset(View v) {
@@ -186,6 +161,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return NONE_STATE;
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+
+        jsonList.clear();
+
+        SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
+        exer1 = patientData.getString("exer1", null);
+        exer2 = patientData.getString("exer2", null);
+        exer3 = patientData.getString("exer3", null);
+
+        prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
+
+        jsonList.add(prevExerTotal);
+        jsonList.add(20);
+        jsonList.add(30);
+        BarChartGraph(labelList, jsonList);
     }
 
     /*
@@ -238,9 +232,10 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
+
+
     public void graphInitSetting(){
         ArrayList<Integer> exer_count = new ArrayList<>();
-        int prevExerTotal;
 
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
         exer1 = patientData.getString("exer1", null);
@@ -286,15 +281,12 @@ public class MainActivity extends AppCompatActivity {
         jsonList.add(20);
         jsonList.add(30);
 
-
         BarChartGraph(labelList, jsonList);
+        barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
         //barChart.setRendererLeftYAxis();
         barChart.setMaxVisibleValueCount(50);
-  //      barChart.setTop(0);
-//        barChart.setBottom(0);
         barChart.setAutoScaleMinMaxEnabled(false);
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
-
         barChart.getAxisLeft().setAxisMaxValue(300);
 
         LimitLine ll1 = new LimitLine(150f, "목표 수치");
@@ -330,7 +322,8 @@ public class MainActivity extends AppCompatActivity {
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getXAxis().setDrawLabels(true);
-        barChart.getXAxis().setTextSize(15);
+        barChart.getXAxis().setTextSize(17);
+        barChart.getXAxis().setTextColor(Color.GRAY);
         barChart.getXAxis().setLabelCount(3);
         barChart.getXAxis().setCenterAxisLabels(false);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labelList));
@@ -340,34 +333,12 @@ public class MainActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
-    public void initBottom_menu (){
-//        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
-        BottomNavigationView bottom_menu = findViewById(R.id.bottom_menu);
-        bottom_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.first_tab:
-//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
-                        Toast.makeText(getApplicationContext(), "Bottom_menu_Clicked - >1", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.second_tab:
-                        Toast.makeText(getBaseContext(), "Bottom_menu_Clicked - >2", Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(.getContext(), "Bottom_menu_Clicked - >2", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.third_tab:
-//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, greenFragment).commit();
-                        return true;
-                    case R.id.fourth_tab:
-  //                      getSupportFragmentManager().beginTransaction().replace(R.id.container, purpleFragment).commit();
-                        return true;
-                }
-                return false;
-            }
-        });
+    public void onBackPressed() {
+        finishAffinity();
     }
 
-    public void onBackPressed() {
-        finish();
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
