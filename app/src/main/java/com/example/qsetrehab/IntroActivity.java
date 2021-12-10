@@ -1,5 +1,6 @@
 package com.example.qsetrehab;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -22,13 +23,17 @@ import io.reactivex.schedulers.Schedulers;
 import static io.reactivex.Completable.fromCallable;
 
 public class IntroActivity extends AppCompatActivity {
-    String link;
+    private String link;
+    private int prevExerTotal = 0;
+    private int prevExerTotal2 = 0;
+    private int prevExerTotal3 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         String urlPhp = "http://203.252.230.222/getExerCount.php?subj_id=1000";
         link = urlPhp;
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
@@ -78,6 +83,22 @@ public class IntroActivity extends AppCompatActivity {
                     else {
                         in.close();
                         String[] dbExerData = line.split("&");
+                        if(dbExerData[3] == null){
+                            dbExerData[3] = "0";
+                        }
+                        if(dbExerData[4] == null){
+                            dbExerData[4] = "0";
+                        }
+                        if(dbExerData[5] == null){
+                            dbExerData[5] = "0";
+                        }
+                        SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = exerData.edit();
+
+                        editor.putString("0_total",dbExerData[0]+ dbExerData[1] + dbExerData[2]); // total
+                        editor.putString("-1_total",dbExerData[1]); // -1 day
+                        editor.putString("-2_total",dbExerData[2]); // -2 day
+                        editor.apply();
 //                        prevCount = Integer.valueOf(dbExerData[2]);
                         return true;               // String 형태로 반환
                     }
@@ -95,5 +116,4 @@ public class IntroActivity extends AppCompatActivity {
                 // execute this RxJava
                 .subscribe();
     }
-
 }

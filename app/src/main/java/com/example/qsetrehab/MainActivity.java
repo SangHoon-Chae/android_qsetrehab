@@ -182,11 +182,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResumeFragments();
         jsonList.clear();
 
-        SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
-        exer1 = patientData.getString("exer1", null);
-        exer2 = patientData.getString("exer2", null);
-        exer3 = patientData.getString("exer3", null);
-
+        SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
+        exer1 = exerData.getString("exer1", null);
+        exer2 = exerData.getString("exer2", null);
+        exer3 = exerData.getString("exer3", null);
+/*
         if(exer1 == null){
             exer1 = "0";
         }
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         if(exer3 == null){
             exer3 = "0";
         }
-
+*/
         prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
 
         jsonList.add(prevExerTotal);
