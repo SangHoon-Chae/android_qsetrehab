@@ -42,6 +42,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.text.TextUtils.concat;
 import static io.reactivex.Completable.fromCallable;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -387,58 +388,21 @@ public class ExerActivity extends AppCompatActivity {
         }, displayInterval);
     }
 
-    private void loadResultsBackground() {
-        fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                try {
-                    URL url = new URL(link);
-                    HttpClient client = new DefaultHttpClient();
-                    HttpGet request = new HttpGet();
-                    request.setURI(new URI(link));
-                    HttpResponse response = client.execute(request);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-                    StringBuffer sb = new StringBuffer("");
-                    String line = "";
-
-                    while ((line = in.readLine()) != null) {
-                        sb.append(line);
-                        break;
-                    }
-                    // DB 에 Data 가 없는 경우
-                    if (line == null) {
-                        in.close();
-                        prevCount = 0;
-                        return true;
-                    }
-                    else {
-                        in.close();
-                        String[] dbExerData = line.split("&");
-                        prevCount = Integer.valueOf(dbExerData[2]);
-                        return true;               // String 형태로 반환
-                    }
-                } catch (Exception e) {
-                    return true;
-                }
-
-                // RxJava does not accept null return value. Null will be treated as a failure.
-                // So just make it return true.
-            }
-        }) // Execute in IO thread, i.e. background thread.
-                .subscribeOn(Schedulers.newThread())
-                // report or post the result to main thread.
-                .observeOn(AndroidSchedulers.mainThread())
-                // execute this RxJava
-                .subscribe();
-    }
-
     private void saveResultsBackground(String result) {
         fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
                 try {
-                    strUrl = "http://143.248.66.229/insertTest.php?ID=".concat(String.valueOf(subj_id)).concat("&countTest=").concat(result);
+
+                    if(whichExer.equals("0")) {
+                        strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_set="+ String.valueOf(exerCount+prevCount) +"&q_walk=0&side_walk=0";
+                    }
+                    else if(whichExer.equals("1")) {
+                        strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_walk="+ String.valueOf(exerCount+prevCount)+"&q_set=0&side_walk=0";
+                    }
+                    else if(whichExer.equals("2")) {
+                        strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&side_walk="+ String.valueOf(exerCount+prevCount)+"&q_set=0&q_walk=0";
+                    }
 
                     Url = new URL(strUrl);  // URL화 한다.
                     HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.

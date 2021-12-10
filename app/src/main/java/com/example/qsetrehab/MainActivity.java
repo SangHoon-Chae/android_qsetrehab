@@ -187,6 +187,16 @@ public class MainActivity extends AppCompatActivity {
         exer2 = patientData.getString("exer2", null);
         exer3 = patientData.getString("exer3", null);
 
+        if(exer1 == null){
+            exer1 = "0";
+        }
+        if(exer2 == null){
+            exer2 = "0";
+        }
+        if(exer3 == null){
+            exer3 = "0";
+        }
+
         prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
 
         jsonList.add(prevExerTotal);
@@ -245,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void graphInitSetting(){
         ArrayList<Integer> exer_count = new ArrayList<>();
@@ -255,8 +264,6 @@ public class MainActivity extends AppCompatActivity {
         // 오늘 날짜 - exerDate 해서 1 or 2 일 경우 exerDate2, exerDate3 에 exerData 저장, 그 이상은 버림.
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        Date date2 = new Date();
 
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
         exer1 = patientData.getString("exer1", null);
@@ -272,8 +279,23 @@ public class MainActivity extends AppCompatActivity {
         exerDate3 = dateFormat.format(c.getTime());
 
         ParsePosition pos = new ParsePosition(0);
-        date = dateFormat.parse(exDate,pos);
-//        date2 = dateFormat.parse (exerDate,pos);
+        Date date = new Date();
+
+        if(exDate == null)
+            exDate = exerDate;
+        if(exer1 == null){
+            exer1 = "0";
+        }
+        if(exer2 == null){
+            exer2 = "0";
+        }
+        if(exer3 == null){
+            exer3 = "0";
+        }
+
+
+        date = dateFormat.parse(exDate, pos);
+        Date date2 = new Date();
 
         long dayDiff = date.getTime() - date2.getTime();
         int hours = (int)(dayDiff/(60*60*1000));
@@ -286,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
             exer1=null;
             exer2=null;
             exer3=null;
+            prevExerTotal3 = prevExerTotal2;
             prevExerTotal2 = prevExerTotal;
         }
         else if (days == 2){
@@ -293,11 +316,15 @@ public class MainActivity extends AppCompatActivity {
             exer2=null;
             exer3=null;
             prevExerTotal3 = prevExerTotal;
+            prevExerTotal2 = 0;
         }
         else {
             exer1=null;
             exer2=null;
             exer3=null;
+            prevExerTotal = 0;
+            prevExerTotal2 = 0;
+            prevExerTotal3 = 0;
         }
 
         // Exercise data 가 비어있을 경우 0 을 입력
