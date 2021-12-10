@@ -24,16 +24,12 @@ import static io.reactivex.Completable.fromCallable;
 
 public class IntroActivity extends AppCompatActivity {
     private String link;
-    private int prevExerTotal = 0;
-    private int prevExerTotal2 = 0;
-    private int prevExerTotal3 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String urlPhp = "http://203.252.230.222/getExerCount.php?subj_id=1000";
+        String urlPhp = "http://203.252.230.222/getExerMaxCount_3day.php?subj_id=1000";
         link = urlPhp;
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
@@ -43,7 +39,6 @@ public class IntroActivity extends AppCompatActivity {
         IntroThread introThread = new IntroThread(handler);
         introThread.start();
     }
-
 
     Handler handler = new Handler() {
         @Override
@@ -92,12 +87,21 @@ public class IntroActivity extends AppCompatActivity {
                         if(dbExerData[5] == null){
                             dbExerData[5] = "0";
                         }
+                        if(dbExerData[6] == null){
+                            dbExerData[6] = "0";
+                        }
+                        if(dbExerData[7] == null){
+                            dbExerData[7] = "0";
+                        }
+                        if(dbExerData[8] == null){
+                            dbExerData[8] = "0";
+                        }
                         SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
                         SharedPreferences.Editor editor = exerData.edit();
 
                         editor.putString("0_total",dbExerData[0]+ dbExerData[1] + dbExerData[2]); // total
-                        editor.putString("-1_total",dbExerData[1]); // -1 day
-                        editor.putString("-2_total",dbExerData[2]); // -2 day
+                        editor.putString("-1_total",dbExerData[3]+ dbExerData[4] + dbExerData[5]); // -1 day
+                        editor.putString("-2_total",dbExerData[6]+ dbExerData[7] + dbExerData[8]); // -2 day
                         editor.apply();
 //                        prevCount = Integer.valueOf(dbExerData[2]);
                         return true;               // String 형태로 반환

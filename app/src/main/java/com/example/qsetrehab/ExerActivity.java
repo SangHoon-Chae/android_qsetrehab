@@ -99,7 +99,7 @@ public class ExerActivity extends AppCompatActivity {
     private int exerCount = 0;
     private int prevCount;
     private int trigger = -1;
-    private boolean upCount;
+    private boolean upCount = false;
     private PieChart pieChart;
     private String whichExer;
     private String exCount;
@@ -365,6 +365,7 @@ public class ExerActivity extends AppCompatActivity {
                 if(Math.ceil(acce_data[2]) < 2) {
                     if(trigger == 1) {
                         exerCount = exerCount + 1;
+                        upCount = true;
                         trigger = -1;
                     }
                 }
@@ -393,26 +394,25 @@ public class ExerActivity extends AppCompatActivity {
             @Override
             public Boolean call() throws Exception {
                 try {
+                    if(upCount) {
+                        if (whichExer.equals("0")) {
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_set=" + String.valueOf(exerCount + prevCount) + "&q_walk=0&side_walk=0";
+                        } else if (whichExer.equals("1")) {
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&side_walk=0";
+                        } else if (whichExer.equals("2")) {
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&side_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&q_walk=0";
+                        }
 
-                    if(whichExer.equals("0")) {
-                        strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_set="+ String.valueOf(exerCount+prevCount) +"&q_walk=0&side_walk=0";
-                    }
-                    else if(whichExer.equals("1")) {
-                        strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_walk="+ String.valueOf(exerCount+prevCount)+"&q_set=0&side_walk=0";
-                    }
-                    else if(whichExer.equals("2")) {
-                        strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&side_walk="+ String.valueOf(exerCount+prevCount)+"&q_set=0&q_walk=0";
-                    }
+                        Url = new URL(strUrl);  // URL화 한다.
+                        HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.
+                        conn.setRequestMethod("GET"); // get방식 통신
 
-                    Url = new URL(strUrl);  // URL화 한다.
-                    HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.
-                    conn.setRequestMethod("GET"); // get방식 통신
-
-//                    InputStream is = conn.getInputStream();        //input스트림 개방
-                    conn.getPermission();
-                    int resCode = conn.getResponseCode();  // connect, send http reuqest, receive htttp request
-                    showToast("데이터 전송 성공.");
-                    System.out.println("code = " + resCode);
+                        //                    InputStream is = conn.getInputStream();        //input스트림 개방
+                        conn.getPermission();
+                        int resCode = conn.getResponseCode();  // connect, send http reuqest, receive htttp request
+                        showToast("데이터 전송 성공.");
+                        System.out.println("code = " + resCode);
+                    }
                 } catch (MalformedURLException | ProtocolException exception) {
                     exception.printStackTrace();
                     showToast("URL error(Get).");

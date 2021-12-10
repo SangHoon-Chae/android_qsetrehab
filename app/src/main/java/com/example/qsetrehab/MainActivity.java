@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
     List<String> titles;
     List<Integer> images;
     Adapter adapter;
-    private int prevExerTotal = 0;
-    private int prevExerTotal2 = 0;
-    private int prevExerTotal3 = 0;
+    private String prevExerTotal;
+    private String prevExerTotal2;
+    private String prevExerTotal3;
 
 
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         exerList = findViewById(R.id.exList);
         exerList.setHasFixedSize(false);
+
+        String urlPhp = "http://203.252.230.222/getExerCount.php?subj_id=1000";
+        link = urlPhp;
 
         //ToolBar
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -179,14 +182,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResumeFragments() {
+        String exerUpdate;
         super.onResumeFragments();
         jsonList.clear();
+
+        SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
+        prevExerTotal2 = patientData.getString("-1_total", null);
+        prevExerTotal3 = patientData.getString("-2_total", null);
 
         SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
         exer1 = exerData.getString("exer1", null);
         exer2 = exerData.getString("exer2", null);
         exer3 = exerData.getString("exer3", null);
-/*
+        exerUpdate = exerData.getString("update", null);
+
         if(exer1 == null){
             exer1 = "0";
         }
@@ -196,12 +205,10 @@ public class MainActivity extends AppCompatActivity {
         if(exer3 == null){
             exer3 = "0";
         }
-*/
-        prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
 
-        jsonList.add(prevExerTotal);
-        jsonList.add(prevExerTotal2);
-        jsonList.add(prevExerTotal3);
+        jsonList.add(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3));
+        jsonList.add(Integer.valueOf(prevExerTotal2));
+        jsonList.add(Integer.valueOf(prevExerTotal3));
         BarChartGraph(labelList, jsonList);
     }
 
@@ -263,12 +270,12 @@ public class MainActivity extends AppCompatActivity {
         // 최근 3일 데이터를 sharedpreference 저장소에 저장
         // 오늘 날짜 - exerDate 해서 1 or 2 일 경우 exerDate2, exerDate3 에 exerData 저장, 그 이상은 버림.
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
-        exer1 = patientData.getString("exer1", null);
-        exer2 = patientData.getString("exer2", null);
-        exer3 = patientData.getString("exer3", null);
+        prevExerTotal = patientData.getString("0_total", null);
+        prevExerTotal2 = patientData.getString("-1_total", null);
+        prevExerTotal3 = patientData.getString("-2_total", null);
         exDate = patientData.getString("exerDate", null);
 
         Calendar c = Calendar.getInstance();
@@ -293,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
             exer3 = "0";
         }
 
-
+/*
         date = dateFormat.parse(exDate, pos);
         Date date2 = new Date();
 
@@ -342,15 +349,15 @@ public class MainActivity extends AppCompatActivity {
             exer_count.add(2,0);
         else
             exer_count.add(2,Integer.valueOf(exer3));
-
+*/
 
         labelList.add("오 늘");
         labelList.add("하루전");
         labelList.add("이틀전");
 
-        jsonList.add(prevExerTotal);
-        jsonList.add(prevExerTotal2);
-        jsonList.add(prevExerTotal3);
+        jsonList.add(Integer.valueOf(prevExerTotal));
+        jsonList.add(Integer.valueOf(prevExerTotal2));
+        jsonList.add(Integer.valueOf(prevExerTotal3));
 
         BarChartGraph(labelList, jsonList);
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
@@ -403,6 +410,79 @@ public class MainActivity extends AppCompatActivity {
         barChart.animateXY(500, 500);
         barChart.invalidate();
     }
+
+/*
+    private void loadResultsBackground() {
+        fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                try {
+                    URL url = new URL(link);
+                    HttpClient client = new DefaultHttpClient();
+                    HttpGet request = new HttpGet();
+                    request.setURI(new URI(link));
+                    HttpResponse response = client.execute(request);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+                    StringBuffer sb = new StringBuffer("");
+                    String line = "";
+
+                    while ((line = in.readLine()) != null) {
+                        sb.append(line);
+                        break;
+                    }
+                    // DB 에 Data 가 없는 경우
+                    if (line == null) {
+                        in.close();
+//                        prevCount = 0;
+                        return true;
+                    }
+                    else {
+                        in.close();
+                        String[] dbExerData = line.split("&");
+                        if(dbExerData[3] == null){
+                            dbExerData[3] = "0";
+                        }
+                        if(dbExerData[4] == null){
+                            dbExerData[4] = "0";
+                        }
+                        if(dbExerData[5] == null){
+                            dbExerData[5] = "0";
+                        }
+                        if(dbExerData[6] == null){
+                            dbExerData[6] = "0";
+                        }
+                        if(dbExerData[7] == null){
+                            dbExerData[7] = "0";
+                        }
+                        if(dbExerData[8] == null){
+                            dbExerData[8] = "0";
+                        }
+                        SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = exerData.edit();
+
+                        editor.putString("0_total",dbExerData[0]+ dbExerData[1] + dbExerData[2]); // total
+                        editor.putString("-1_total",dbExerData[3]+ dbExerData[4] + dbExerData[5]); // -1 day
+                        editor.putString("-2_total",dbExerData[6]+ dbExerData[7] + dbExerData[8]); // -2 day
+                        editor.apply();
+//                        prevCount = Integer.valueOf(dbExerData[2]);
+                        return true;               // String 형태로 반환
+                    }
+                } catch (Exception e) {
+                    return true;
+                }
+
+                // RxJava does not accept null return value. Null will be treated as a failure.
+                // So just make it return true.
+            }
+        }) // Execute in IO thread, i.e. background thread.
+                .subscribeOn(Schedulers.newThread())
+                // report or post the result to main thread.
+                .observeOn(AndroidSchedulers.mainThread())
+                // execute this RxJava
+                .subscribe();
+    }
+    */
 
     public void onBackPressed() {
         finishAffinity();
