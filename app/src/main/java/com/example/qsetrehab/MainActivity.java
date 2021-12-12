@@ -206,6 +206,16 @@ public class MainActivity extends AppCompatActivity {
             exer3 = "0";
         }
 
+        if(prevExerTotal == null){
+            prevExerTotal = "0";
+        }
+        if(prevExerTotal2 == null){
+            prevExerTotal2 = "0";
+        }
+        if(prevExerTotal3 == null){
+            prevExerTotal3 = "0";
+        }
+
         jsonList.add(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3));
         jsonList.add(Integer.valueOf(prevExerTotal2));
         jsonList.add(Integer.valueOf(prevExerTotal3));
@@ -277,6 +287,16 @@ public class MainActivity extends AppCompatActivity {
         prevExerTotal2 = patientData.getString("-1_total", null);
         prevExerTotal3 = patientData.getString("-2_total", null);
         exDate = patientData.getString("exerDate", null);
+
+        if(prevExerTotal == null){
+            prevExerTotal = "0";
+        }
+        if(prevExerTotal2 == null){
+            prevExerTotal2 = "0";
+        }
+        if(prevExerTotal3 == null){
+            prevExerTotal3 = "0";
+        }
 
         Calendar c = Calendar.getInstance();
         exerDate = dateFormat.format(c.getTime());
