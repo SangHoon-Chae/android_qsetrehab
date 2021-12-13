@@ -11,7 +11,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     private String prevExerTotal;
     private String prevExerTotal2;
     private String prevExerTotal3;
-
 
     public int exercise_type; // 1: Q-set, 2: Walk, 3: Side-walk
     public static final String WIFE_STATE = "WIFE";
@@ -129,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         exerList.setLayoutManager(gridLayoutManager);
         exerList.setAdapter(adapter);
+
+        initBottom_menu();
 
         String getNetwork =  getWhatKindOfNetwork(getApplication());
 
@@ -399,6 +403,32 @@ public class MainActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
+    public void initBottom_menu (){
+//        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
+        BottomNavigationView bottom_menu = findViewById(R.id.bottom_menu);
+        bottom_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.first_tab:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
+                        Toast.makeText(getApplicationContext(), "Bottom_menu_Clicked - >1", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.second_tab:
+                        Intent intent = new Intent(MainActivity.this, Note.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.third_tab:
+//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, greenFragment).commit();
+                        return true;
+                    case R.id.fourth_tab:
+                        //                      getSupportFragmentManager().beginTransaction().replace(R.id.container, purpleFragment).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
 /*
     private void loadResultsBackground() {
         fromCallable(new Callable<Boolean>() {

@@ -115,15 +115,11 @@ public class Note extends AppCompatActivity {
         nameEdit.setText(patientData.getString("name", null));
         birth_dateEdit.setText(patientData.getString("birth_date", null));
         groupEdit.setText(patientData.getString("group", null));
-        etcEdit.setText(patientData.getString("etc", null));
-        thres_idEdit.setText(patientData.getString("thres_id", null));
 
         id = idEdit.getText().toString();
         name = nameEdit.getText().toString();
         birth_date =  birth_dateEdit.getText().toString();
         group = groupEdit.getText().toString();
-        etc = etcEdit.getText().toString();
-        thres_id = thres_idEdit.getText().toString();
 
         if (shouldAskPermissions()) {
             askPermissions();
@@ -165,17 +161,13 @@ public class Note extends AppCompatActivity {
                 SharedPreferences.Editor editor = patientData.edit();
 
                 id = idEdit.getText().toString();
-                thres_id = thres_idEdit.getText().toString();
                 name = nameEdit.getText().toString();
                 birth_date =  birth_dateEdit.getText().toString();
-                etc = etcEdit.getText().toString();
                 group = groupEdit.getText().toString();
 
                 editor.putString("id", id);
                 editor.putString("name", name);
                 editor.putString("birth_date", birth_date);
-                editor.putString("etc", etc);
-                editor.putString("thres_id", thres_id);
                 editor.putString("group", group);
                 editor.apply();
 
@@ -234,7 +226,7 @@ public class Note extends AppCompatActivity {
             }
         });
 
-        /*
+
         //if click on me, then display the current rating value.
         saveNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,20 +236,15 @@ public class Note extends AppCompatActivity {
                 SharedPreferences.Editor editor = patientData.edit();
 
                 id = idEdit.getText().toString();
-                thres_id = thres_idEdit.getText().toString();
                 name = nameEdit.getText().toString();
                 birth_date =  birth_dateEdit.getText().toString();
-                etc = etcEdit.getText().toString();
                 group = groupEdit.getText().toString();
 
                 editor.putString("id", id);
                 editor.putString("name", name);
                 editor.putString("birth_date", birth_date);
-                editor.putString("etc", etc);
-                editor.putString("thres_id", thres_id);
                 editor.putString("group", group);
                 editor.apply();
-
 
                 try {
                     Toast.makeText(getApplicationContext(), "SAVE_NOTE", Toast.LENGTH_SHORT).show();
@@ -282,7 +269,6 @@ public class Note extends AppCompatActivity {
                 etcEdit.setText("");
             }
         });
-        */
     }
 
     protected boolean shouldAskPermissions() {
