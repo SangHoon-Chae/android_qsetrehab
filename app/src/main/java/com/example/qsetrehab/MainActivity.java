@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private BarChart barChart;
-    private String urlPhp = "http://143.248.66.229/getExerCount.php?ID=".concat(String.valueOf(7));
-    private String link;
+//    private String urlPhp = "http://143.248.66.229/getExerCount.php?ID=".concat(String.valueOf(7));
+//    private String link;
     private TextView minuteTextview;
     ArrayList<Integer> jsonList = new ArrayList<>(); // ArrayList 선언
     ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         exerList = findViewById(R.id.exList);
         exerList.setHasFixedSize(false);
 
-        String urlPhp = "http://203.252.230.222/getExerCount.php?subj_id=1000";
-        link = urlPhp;
+//        String urlPhp = "http://203.252.230.222/getExerCount.php?subj_id=1000";
+//        link = urlPhp;
 
         //ToolBar
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -182,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResumeFragments() {
-        String exerUpdate;
         super.onResumeFragments();
         jsonList.clear();
 
@@ -194,27 +193,6 @@ public class MainActivity extends AppCompatActivity {
         exer1 = exerData.getString("exer1", null);
         exer2 = exerData.getString("exer2", null);
         exer3 = exerData.getString("exer3", null);
-        exerUpdate = exerData.getString("update", null);
-
-        if(exer1 == null){
-            exer1 = "0";
-        }
-        if(exer2 == null){
-            exer2 = "0";
-        }
-        if(exer3 == null){
-            exer3 = "0";
-        }
-
-        if(prevExerTotal == null){
-            prevExerTotal = "0";
-        }
-        if(prevExerTotal2 == null){
-            prevExerTotal2 = "0";
-        }
-        if(prevExerTotal3 == null){
-            prevExerTotal3 = "0";
-        }
 
         jsonList.add(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3));
         jsonList.add(Integer.valueOf(prevExerTotal2));
@@ -287,16 +265,6 @@ public class MainActivity extends AppCompatActivity {
         prevExerTotal2 = patientData.getString("-1_total", null);
         prevExerTotal3 = patientData.getString("-2_total", null);
         exDate = patientData.getString("exerDate", null);
-
-        if(prevExerTotal == null){
-            prevExerTotal = "0";
-        }
-        if(prevExerTotal2 == null){
-            prevExerTotal2 = "0";
-        }
-        if(prevExerTotal3 == null){
-            prevExerTotal3 = "0";
-        }
 
         Calendar c = Calendar.getInstance();
         exerDate = dateFormat.format(c.getTime());

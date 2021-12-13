@@ -28,7 +28,7 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String urlPhp = "http://203.252.230.222/getExerMaxCount_3day.php?subj_id=1000";
+        String urlPhp = "http://203.252.230.222/getExerMaxCount_3day_pre.php?subj_id=1000";
         link = urlPhp;
 
         super.onCreate(savedInstanceState);
@@ -78,30 +78,17 @@ public class IntroActivity extends AppCompatActivity {
                     else {
                         in.close();
                         String[] dbExerData = line.split("&");
-                        if(dbExerData[3] == null){
-                            dbExerData[3] = "0";
-                        }
-                        if(dbExerData[4] == null){
-                            dbExerData[4] = "0";
-                        }
-                        if(dbExerData[5] == null){
-                            dbExerData[5] = "0";
-                        }
-                        if(dbExerData[6] == null){
-                            dbExerData[6] = "0";
-                        }
-                        if(dbExerData[7] == null){
-                            dbExerData[7] = "0";
-                        }
-                        if(dbExerData[8] == null){
-                            dbExerData[8] = "0";
-                        }
+
                         SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
                         SharedPreferences.Editor editor = exerData.edit();
 
-                        editor.putString("0_total",dbExerData[0]+ dbExerData[1] + dbExerData[2]); // total
-                        editor.putString("-1_total",dbExerData[3]+ dbExerData[4] + dbExerData[5]); // -1 day
-                        editor.putString("-2_total",dbExerData[6]+ dbExerData[7] + dbExerData[8]); // -2 day
+                        int result1 = Integer.valueOf(dbExerData[0])+ Integer.valueOf(dbExerData[1]) + Integer.valueOf(dbExerData[2]);
+                        int result2 = Integer.valueOf(dbExerData[3])+ Integer.valueOf(dbExerData[4]) + Integer.valueOf(dbExerData[5]);
+                        int result3 = Integer.valueOf(dbExerData[6])+ Integer.valueOf(dbExerData[7]) + Integer.valueOf(dbExerData[8]);
+
+                        editor.putString("0_total", String.valueOf(result1)); // total
+                        editor.putString("-1_total",String.valueOf(result2)); // -1 day
+                        editor.putString("-2_total",String.valueOf(result3)); // -2 day
                         editor.apply();
 //                        prevCount = Integer.valueOf(dbExerData[2]);
                         return true;               // String 형태로 반환
