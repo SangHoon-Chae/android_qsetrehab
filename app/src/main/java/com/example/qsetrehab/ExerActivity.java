@@ -64,7 +64,7 @@ public class ExerActivity extends AppCompatActivity {
 
     private String msg;
     private String link;
-    private int subj_id;
+    private String subj_id;
 
     private URL Url;
     private String strUrl;
@@ -106,7 +106,6 @@ public class ExerActivity extends AppCompatActivity {
 
     private String exeDate;
 
-
     // Android activity lifecycle states
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +116,15 @@ public class ExerActivity extends AppCompatActivity {
         initializeViews();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        subj_id = 7; //김외숙
+        //subj_id by sharedpreference
+
+        SharedPreferences subj_Data = getSharedPreferences("subject_information", MODE_PRIVATE);
+        subj_id = subj_Data.getString("id", null);
+        if(subj_id == null)
+        {
+            showToast("ID 를 지정해주세요");
+            finish();
+        }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
@@ -187,24 +194,9 @@ public class ExerActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-/*
-        editor.putString("exer1",String.valueOf(prevCount));
-        editor.apply();
-
-        mStartStopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Plot.class);
-                startActivity(intent);
-            }
-        });
-*/
-//        mLabelInterfaceTime.setText(R.string.ready_title);
     }
 
     private void showPiechart(int pre, int now) {
-
         pieChart.setUsePercentValues(true);
 
         List<PieEntry> value = new ArrayList<>();
@@ -396,11 +388,11 @@ public class ExerActivity extends AppCompatActivity {
                 try {
                     if(upCount) {
                         if (whichExer.equals("0")) {
-                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_set=" + String.valueOf(exerCount + prevCount) + "&q_walk=0&side_walk=0";
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&q_set=" + String.valueOf(exerCount + prevCount) + "&q_walk=0&side_walk=0";
                         } else if (whichExer.equals("1")) {
-                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&q_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&side_walk=0";
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&q_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&side_walk=0";
                         } else if (whichExer.equals("2")) {
-                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id=1000&side_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&q_walk=0";
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&side_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&q_walk=0";
                         }
 
                         Url = new URL(strUrl);  // URL화 한다.

@@ -64,10 +64,9 @@ public class Note extends AppCompatActivity {
     private String strUrl;
     private String name;
     private String birth_date;
-    private String etc; private String group;
+    private String group;
     private String sex;
     private String id;
-    private String thres_id;
 
 //    ArrayList<Test> patients;
 
@@ -143,6 +142,45 @@ public class Note extends AppCompatActivity {
         }
     }
 
+
+    private void saveResultsBackground(String result) {
+        fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                try {
+                    strUrl = "http://203.252.230.222/insert_subj_info.php?subj_id=" + id + "&&name=" + name + "&birthday=" + birth_date + "&sex=" + sex;
+                    Url = new URL(strUrl);  // URL화 한다.
+                    HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.
+                    conn.setRequestMethod("GET"); // get방식 통신
+
+                    //                    InputStream is = conn.getInputStream();        //input스트림 개방
+                    conn.getPermission();
+                    int resCode = conn.getResponseCode();  // connect, send http reuqest, receive htttp request
+                    showToast("데이터 전송 성공.");
+                    System.out.println("code = " + resCode);
+                }
+                catch (MalformedURLException | ProtocolException exception) {
+                exception.printStackTrace();
+                showToast("URL error(Get).");
+                return false;
+                } catch (IOException io) {
+                    io.printStackTrace();
+                    showToast("데이터 전송 실패. 인터넷연결을 확인하세요.");
+                    return false;
+                }
+                // RxJava does not accept null return value. Null will be treated as a failure.
+                // So just make it return true.
+                    return true;
+                }
+            })
+                    .subscribeOn(Schedulers.io())
+                // report or post the result to main thread.
+                .observeOn(AndroidSchedulers.mainThread())
+                // execute this RxJava
+                .subscribe();
+    }
+
+
     public void showToast(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -156,7 +194,6 @@ public class Note extends AppCompatActivity {
         fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-
                 SharedPreferences patientData = getSharedPreferences("subject_information", MODE_PRIVATE);
                 SharedPreferences.Editor editor = patientData.edit();
 
@@ -226,7 +263,6 @@ public class Note extends AppCompatActivity {
             }
         });
 
-
         //if click on me, then display the current rating value.
         saveNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,7 +291,6 @@ public class Note extends AppCompatActivity {
             }
         });
 
-
         clearData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,7 +301,6 @@ public class Note extends AppCompatActivity {
                 nameEdit.setText("");
                 birth_dateEdit.setText("");
                 groupEdit.setText("");
-                etcEdit.setText("");
             }
         });
     }

@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     String exerDate2;  //어제
     String exerDate3;  //그저께
 
+
     RecyclerView exerList;
     List<String> titles;
     List<Integer> images;
@@ -262,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
         // 최근 3일 데이터를 sharedpreference 저장소에 저장
         // 오늘 날짜 - exerDate 해서 1 or 2 일 경우 exerDate2, exerDate3 에 exerData 저장, 그 이상은 버림.
 
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
         prevExerTotal = patientData.getString("0_total", null);
@@ -415,11 +415,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Bottom_menu_Clicked - >1", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.second_tab:
-                        Intent intent = new Intent(MainActivity.this, Note.class);
-                        startActivity(intent);
+
                         return true;
                     case R.id.third_tab:
-//                        getSupportFragmentManager().beginTransaction().replace(R.id.container, greenFragment).commit();
+                        Intent intent = new Intent(MainActivity.this, Note.class);
+                        startActivity(intent);
                         return true;
                     case R.id.fourth_tab:
                         //                      getSupportFragmentManager().beginTransaction().replace(R.id.container, purpleFragment).commit();
