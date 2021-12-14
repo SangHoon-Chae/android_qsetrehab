@@ -199,6 +199,16 @@ public class MainActivity extends AppCompatActivity {
         exer2 = exerData.getString("exer2", null);
         exer3 = exerData.getString("exer3", null);
 
+        if(exer1 == null){
+            exer1 = "0";
+        }
+        if(exer2 == null){
+            exer2 = "0";
+        }
+        if(exer3 == null){
+            exer3 = "0";
+        }
+
         jsonList.add(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3));
         jsonList.add(Integer.valueOf(prevExerTotal2));
         jsonList.add(Integer.valueOf(prevExerTotal3));
@@ -292,56 +302,22 @@ public class MainActivity extends AppCompatActivity {
             exer3 = "0";
         }
 
-/*
         date = dateFormat.parse(exDate, pos);
         Date date2 = new Date();
 
-        long dayDiff = date.getTime() - date2.getTime();
-        int hours = (int)(dayDiff/(60*60*1000));
-        int days = hours/24;
-
-        if(days == 0) {
-            prevExerTotal = Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3);
-        }
-        else if (days == 1){
-            exer1=null;
-            exer2=null;
-            exer3=null;
-            prevExerTotal3 = prevExerTotal2;
-            prevExerTotal2 = prevExerTotal;
-        }
-        else if (days == 2){
-            exer1=null;
-            exer2=null;
-            exer3=null;
-            prevExerTotal3 = prevExerTotal;
-            prevExerTotal2 = 0;
-        }
-        else {
-            exer1=null;
-            exer2=null;
-            exer3=null;
-            prevExerTotal = 0;
-            prevExerTotal2 = 0;
-            prevExerTotal3 = 0;
+        if(!date.equals(date2)) {
+            exer1="0";
+            exer2="0";
+            exer3="0";
         }
 
         // Exercise data 가 비어있을 경우 0 을 입력
         if(exer1 == null)
-            exer_count.add(0,0);
-        else
-            exer_count.add(0,Integer.valueOf(exer1));
-
+            exer1="0";
         if(exer2 == null)
-            exer_count.add(1,0);
-        else
-            exer_count.add(1,Integer.valueOf(exer2));
-
+            exer2="0";
         if(exer3 == null)
-            exer_count.add(2,0);
-        else
-            exer_count.add(2,Integer.valueOf(exer3));
-*/
+            exer3="0";
 
         labelList.add("오 늘");
         labelList.add("하루전");

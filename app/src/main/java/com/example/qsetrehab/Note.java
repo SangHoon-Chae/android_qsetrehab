@@ -142,45 +142,6 @@ public class Note extends AppCompatActivity {
         }
     }
 
-
-    private void saveResultsBackground(String result) {
-        fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                try {
-                    strUrl = "http://203.252.230.222/insert_subj_info.php?subj_id=" + id + "&&name=" + name + "&birthday=" + birth_date + "&sex=" + sex;
-                    Url = new URL(strUrl);  // URL화 한다.
-                    HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.
-                    conn.setRequestMethod("GET"); // get방식 통신
-
-                    //                    InputStream is = conn.getInputStream();        //input스트림 개방
-                    conn.getPermission();
-                    int resCode = conn.getResponseCode();  // connect, send http reuqest, receive htttp request
-                    showToast("데이터 전송 성공.");
-                    System.out.println("code = " + resCode);
-                }
-                catch (MalformedURLException | ProtocolException exception) {
-                exception.printStackTrace();
-                showToast("URL error(Get).");
-                return false;
-                } catch (IOException io) {
-                    io.printStackTrace();
-                    showToast("데이터 전송 실패. 인터넷연결을 확인하세요.");
-                    return false;
-                }
-                // RxJava does not accept null return value. Null will be treated as a failure.
-                // So just make it return true.
-                    return true;
-                }
-            })
-                    .subscribeOn(Schedulers.io())
-                // report or post the result to main thread.
-                .observeOn(AndroidSchedulers.mainThread())
-                // execute this RxJava
-                .subscribe();
-    }
-
-
     public void showToast(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -200,12 +161,8 @@ public class Note extends AppCompatActivity {
                 id = idEdit.getText().toString();
                 name = nameEdit.getText().toString();
                 birth_date =  birth_dateEdit.getText().toString();
-                group = groupEdit.getText().toString();
 
                 editor.putString("id", id);
-                editor.putString("name", name);
-                editor.putString("birth_date", birth_date);
-                editor.putString("group", group);
                 editor.apply();
 
                 if (gender != -1) {
@@ -214,10 +171,13 @@ public class Note extends AppCompatActivity {
                     } else if (gender == 0) {
                         sex = "F";
                     }
+                } else {
+                    sex = null;
+                    showToast("성별을 지정해주세요. 데이터 전송 실패");
                 }
 
                 try {
-                    strUrl = "http://143.248.66.229/hbr_project_php/insertSubjinfo.php?&id=" + id + "&name=" + name + "&sex=" + sex + "&birth_date=" + birth_date + "&group_name=" + group;
+                    strUrl = "http://203.252.230.222/insert_subj_info.php?subj_id=" + id + "&name=" + name + "&birthday=" + birth_date + "&sex=" + sex;
 
                     Url = new URL(strUrl);  // URL화 한다.
                     HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.
