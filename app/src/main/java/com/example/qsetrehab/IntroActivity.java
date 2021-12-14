@@ -24,11 +24,16 @@ import static io.reactivex.Completable.fromCallable;
 
 public class IntroActivity extends AppCompatActivity {
     private String link;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String urlPhp = "http://203.252.230.222/getExerMaxCount_3day_pre.php?subj_id=1000";
+        //subj_id by sharedpreference
+        SharedPreferences subj_Data = getSharedPreferences("subject_information", MODE_PRIVATE);
+        id = subj_Data.getString("id", null);
+
+        String urlPhp = "http://203.252.230.222/getExerMaxCount_3day_pre.php?subj_id=" + id;
         link = urlPhp;
 
         super.onCreate(savedInstanceState);

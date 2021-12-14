@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     String exerDate;   //오늘
     String exerDate2;  //어제
     String exerDate3;  //그저께
-
+    String exDate;
 
     RecyclerView exerList;
     List<String> titles;
@@ -268,12 +268,12 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void graphInitSetting(){
         ArrayList<Integer> exer_count = new ArrayList<>();
-        String exDate;
+
 
         // 최근 3일 데이터를 sharedpreference 저장소에 저장
         // 오늘 날짜 - exerDate 해서 1 or 2 일 경우 exerDate2, exerDate3 에 exerData 저장, 그 이상은 버림.
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
         prevExerTotal = patientData.getString("0_total", null);
         prevExerTotal2 = patientData.getString("-1_total", null);
@@ -302,13 +302,17 @@ public class MainActivity extends AppCompatActivity {
             exer3 = "0";
         }
 
-        date = dateFormat.parse(exDate, pos);
-        Date date2 = new Date();
+        SharedPreferences Data = getSharedPreferences("exer_data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = Data.edit();
 
-        if(!date.equals(date2)) {
+        if(!exerDate.equals(exDate)) {
             exer1="0";
             exer2="0";
             exer3="0";
+            editor.putString("exer1", exer1);
+            editor.putString("exer2", exer2);
+            editor.putString("exer3", exer3);
+            editor.apply();
         }
 
         // Exercise data 가 비어있을 경우 0 을 입력

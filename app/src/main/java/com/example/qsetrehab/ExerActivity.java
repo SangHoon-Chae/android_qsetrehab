@@ -63,7 +63,6 @@ public class ExerActivity extends AppCompatActivity {
     private SimpleSocket socket;
 
     private String msg;
-    private String link;
     private String subj_id;
 
     private URL Url;
@@ -117,10 +116,10 @@ public class ExerActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //subj_id by sharedpreference
-
         SharedPreferences subj_Data = getSharedPreferences("subject_information", MODE_PRIVATE);
         subj_id = subj_Data.getString("id", null);
-        if(subj_id == null)
+
+        if(subj_id == null || subj_id =="")
         {
             showToast("ID 를 지정해주세요");
             finish();
@@ -153,8 +152,6 @@ public class ExerActivity extends AppCompatActivity {
                 exCount = "0";
         }
         //php에서 저장값 가져오는 주소 설정
-        String urlPhp = "http://143.248.66.229/getExerCount.php?ID=".concat(String.valueOf(subj_id));
-        link = urlPhp;
 
         // Initial data loading of the day
 //        loadResultsBackground();

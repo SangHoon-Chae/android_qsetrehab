@@ -257,10 +257,10 @@ public class Note extends AppCompatActivity {
 //                SharedPreferences test2 = getSharedPreferences("patientData", 0);
 //                SharedPreferences sharedPref = getSharedPreferences("patientData", Context.MODE_PRIVATE);
 //                String name =sharedPref.getString("name", null);
-                idEdit.setText("");
-                nameEdit.setText("");
-                birth_dateEdit.setText("");
-                groupEdit.setText("");
+                idEdit.setText(null);
+                nameEdit.setText(null);
+                birth_dateEdit.setText(null);
+                groupEdit.setText(null);
             }
         });
     }
