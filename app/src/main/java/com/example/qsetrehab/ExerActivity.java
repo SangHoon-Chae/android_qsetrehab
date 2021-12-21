@@ -119,6 +119,10 @@ public class ExerActivity extends AppCompatActivity {
         SharedPreferences subj_Data = getSharedPreferences("subject_information", MODE_PRIVATE);
         subj_id = subj_Data.getString("id", null);
 
+        //선택 운동확인
+        SharedPreferences exerType = getSharedPreferences("exer_type", MODE_PRIVATE);
+        whichExer = exerType.getString("exer", null);
+
         if(subj_id == null || subj_id =="")
         {
             showToast("ID 를 지정해주세요");
@@ -128,10 +132,6 @@ public class ExerActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
         strDate = dateFormat.format(date);
-
-        //선택 운동확인
-        SharedPreferences exerType = getSharedPreferences("exer_type", MODE_PRIVATE);
-        whichExer = exerType.getString("exer", null);
 
         //선택 운동개수확인
         SharedPreferences exer_count = getSharedPreferences("exer_data", MODE_PRIVATE);
@@ -151,11 +151,7 @@ public class ExerActivity extends AppCompatActivity {
             if (exCount == null)
                 exCount = "0";
         }
-        //php에서 저장값 가져오는 주소 설정
 
-        // Initial data loading of the day
-//        loadResultsBackground();
-//        showGraph();
         // setup sessions
         mIMUSession = new IMUSession(this);
 //        mWifiSession = new WifiSession(this);
@@ -184,10 +180,21 @@ public class ExerActivity extends AppCompatActivity {
                 SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = patientData.edit();
 
-                editor.putString("exer1",String.valueOf(exerCount+prevCount));
-                editor.putString("exerDate",strDate);
-                editor.apply();
-
+                if(whichExer.equals("0")) {
+                    editor.putString("exer1",String.valueOf(exerCount+prevCount));
+                    editor.putString("exerDate",strDate);
+                    editor.apply();
+                }
+                else if(whichExer.equals("1")) {
+                    editor.putString("exer2",String.valueOf(exerCount+prevCount));
+                    editor.putString("exerDate",strDate);
+                    editor.apply();
+                }
+                else if(whichExer.equals("2")) {
+                    editor.putString("exer3",String.valueOf(exerCount+prevCount));
+                    editor.putString("exerDate",strDate);
+                    editor.apply();
+                }
                 finish();
             }
         });
@@ -199,8 +206,8 @@ public class ExerActivity extends AppCompatActivity {
         List<PieEntry> value = new ArrayList<>();
 
         if (pre <= 1000) {
-            value.add(new PieEntry((float) pre, "Performed(%)"));
-            value.add(new PieEntry((float) 1000 - pre, "Remaining(%)"));
+            value.add(new PieEntry((float) pre + now, "Performed(%)"));
+            value.add(new PieEntry((float) 1000 - pre+now, "Remaining(%)"));
         }
         else
         {
@@ -228,6 +235,9 @@ public class ExerActivity extends AppCompatActivity {
 
         pieData.setValueTextSize(30f);
         pieData.setValueTextColor(Color.WHITE);
+
+        pieChart.notifyDataSetChanged();
+        pieChart.invalidate();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -236,12 +246,10 @@ public class ExerActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
     }
-
 
     @Override
     protected void onDestroy() {
@@ -272,7 +280,6 @@ public class ExerActivity extends AppCompatActivity {
         });
     }
 
-
     public void showToast(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -281,7 +288,6 @@ public class ExerActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void resetUI() {
         runOnUiThread(new Runnable() {
@@ -355,6 +361,7 @@ public class ExerActivity extends AppCompatActivity {
                     if(trigger == 1) {
                         exerCount = exerCount + 1;
                         upCount = true;
+                        showPiechart(prevCount, exerCount);
                         trigger = -1;
                     }
                 }
@@ -369,7 +376,7 @@ public class ExerActivity extends AppCompatActivity {
         });
 
         // determine display update rate (100 ms)
-        final long displayInterval = 100;
+        final long displayInterval = 150;
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -442,6 +449,31 @@ public class ExerActivity extends AppCompatActivity {
         else if(whichExer.equals("2")) {
             editor.putString("exer3",String.valueOf(exerCount+prevCount));
             editor.putString("exerDate",strDate);
+            editor.apply();
+        }
+
+        finish();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveResultsBackground(String.valueOf(exerCount + prevCount));
+
+        SharedPreferences patientData = getSharedPreferences("exer_data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = patientData.edit();
+
+        if (whichExer.equals("0")) {
+            editor.putString("exer1", String.valueOf(exerCount + prevCount));
+            editor.putString("exerDate", strDate);
+            editor.apply();
+        } else if (whichExer.equals("1")) {
+            editor.putString("exer2", String.valueOf(exerCount + prevCount));
+            editor.putString("exerDate", strDate);
+            editor.apply();
+        } else if (whichExer.equals("2")) {
+            editor.putString("exer3", String.valueOf(exerCount + prevCount));
+            editor.putString("exerDate", strDate);
             editor.apply();
         }
 

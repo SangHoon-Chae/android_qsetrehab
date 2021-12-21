@@ -269,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
     public void graphInitSetting(){
         ArrayList<Integer> exer_count = new ArrayList<>();
 
-
         // 최근 3일 데이터를 sharedpreference 저장소에 저장
         // 오늘 날짜 - exerDate 해서 1 or 2 일 경우 exerDate2, exerDate3 에 exerData 저장, 그 이상은 버림.
 
@@ -286,9 +285,6 @@ public class MainActivity extends AppCompatActivity {
         exerDate2 = dateFormat.format(c.getTime());
         c.add(Calendar.DATE, -1);
         exerDate3 = dateFormat.format(c.getTime());
-
-        ParsePosition pos = new ParsePosition(0);
-        Date date = new Date();
 
         if(exDate == null)
             exDate = exerDate;
@@ -315,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         }
 
-        // Exercise data 가 비어있을 경우 0 을 입력
+        // 첫 부팅시 Exercise data 가 비어있을 경우 0 을 입력
         if(exer1 == null)
             exer1="0";
         if(exer2 == null)
@@ -338,8 +334,13 @@ public class MainActivity extends AppCompatActivity {
         barChart.setAutoScaleMinMaxEnabled(false);
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
         barChart.getAxisLeft().setAxisMaxValue(300);
+        LimitLine ll1;
+        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) < 150) {
+            ll1 = new LimitLine(150f, "목표 수치");
+        } else {
+            ll1 = new LimitLine(150f, "목표 달성");
+        }
 
-        LimitLine ll1 = new LimitLine(150f, "목표 수치");
         ll1.setLineWidth(4f);
         ll1.enableDashedLine(10f, 10f, 0f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
@@ -368,7 +369,12 @@ public class MainActivity extends AppCompatActivity {
         BarData data = new BarData (depenses);
 
         barChart.getAxisRight().setEnabled(false);
-        depenses.setColors(ColorTemplate.LIBERTY_COLORS); //
+        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) > 150) {
+            depenses.setColors(ColorTemplate.JOYFUL_COLORS);
+        }
+        else
+            depenses.setColors(ColorTemplate.LIBERTY_COLORS);
+
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getXAxis().setDrawLabels(true);
@@ -380,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
 
         barChart.setData(data);
         barChart.animateXY(500, 500);
+        barChart.notifyDataSetChanged();
         barChart.invalidate();
     }
 
