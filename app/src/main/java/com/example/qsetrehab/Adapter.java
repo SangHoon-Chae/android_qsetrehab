@@ -79,6 +79,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                             exer_setting(2);
                             itemView.getContext().startActivity(intent);
                             break;
+                        case "Squat":
+                            exer_setting(3);
+                            itemView.getContext().startActivity(intent);
+                            break;
                         default:
                             break;
                     }

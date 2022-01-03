@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         exer1 = exerData.getString("exer1", null);
         exer2 = exerData.getString("exer2", null);
         exer3 = exerData.getString("exer3", null);
+        exer4 = exerData.getString("exer4", null);
 
         if(exer1 == null){
             exer1 = "0";
@@ -211,8 +212,11 @@ public class MainActivity extends AppCompatActivity {
         if(exer3 == null){
             exer3 = "0";
         }
+        if(exer4 == null){
+            exer4 = "0";
+        }
 
-        jsonList.add(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3));
+        jsonList.add(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) + Integer.valueOf(exer4));
         jsonList.add(Integer.valueOf(prevExerTotal2));
         jsonList.add(Integer.valueOf(prevExerTotal3));
         BarChartGraph(labelList, jsonList);
@@ -300,6 +304,9 @@ public class MainActivity extends AppCompatActivity {
         if(exer3 == null){
             exer3 = "0";
         }
+        if(exer4 == null){
+            exer4 = "0";
+        }
 
         SharedPreferences Data = getSharedPreferences("exer_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = Data.edit();
@@ -308,9 +315,11 @@ public class MainActivity extends AppCompatActivity {
             exer1="0";
             exer2="0";
             exer3="0";
+            exer4="0";
             editor.putString("exer1", exer1);
             editor.putString("exer2", exer2);
             editor.putString("exer3", exer3);
+            editor.putString("exer4", exer4);
             editor.apply();
         }
 
@@ -321,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
             exer2="0";
         if(exer3 == null)
             exer3="0";
+        if(exer4 == null)
+            exer4="0";
 
         labelList.add("오 늘");
         labelList.add("하루전");
@@ -336,12 +347,12 @@ public class MainActivity extends AppCompatActivity {
         barChart.setMaxVisibleValueCount(50);
         barChart.setAutoScaleMinMaxEnabled(false);
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
-        barChart.getAxisLeft().setAxisMaxValue(1000);
+        barChart.getAxisLeft().setAxisMaxValue(500);
         LimitLine ll1;
-        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) < 600) {
-            ll1 = new LimitLine(600f, "목표 수치");
+        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) + Integer.valueOf(exer4) < 200) {
+            ll1 = new LimitLine(200f, "목표 수치");
         } else {
-            ll1 = new LimitLine(600f, "목표 달성");
+            ll1 = new LimitLine(200f, "목표 달성");
         }
 
         ll1.setLineWidth(4f);
@@ -372,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
         BarData data = new BarData (depenses);
 
         barChart.getAxisRight().setEnabled(false);
-        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) > 600) {
+        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) + Integer.valueOf(exer4) > 200) {
             depenses.setColors(ColorTemplate.JOYFUL_COLORS);
         }
         else
@@ -402,16 +413,16 @@ public class MainActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.first_tab:
 //                        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
-                        Toast.makeText(getApplicationContext(), "Bottom_menu_Clicked - >1", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.second_tab:
-
+                        Toast.makeText(getApplicationContext(), "Video_instruction_Under Construction", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.third_tab:
                         Intent intent = new Intent(MainActivity.this, Note.class);
                         startActivity(intent);
                         return true;
                     case R.id.fourth_tab:
+                        Toast.makeText(getApplicationContext(), "Rank_service_Under Construction", Toast.LENGTH_SHORT).show();
                         //                      getSupportFragmentManager().beginTransaction().replace(R.id.container, purpleFragment).commit();
                         return true;
                 }

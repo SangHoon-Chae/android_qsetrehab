@@ -87,9 +87,9 @@ public class IntroActivity extends AppCompatActivity {
                         SharedPreferences exerData = getSharedPreferences("exer_data", MODE_PRIVATE);
                         SharedPreferences.Editor editor = exerData.edit();
 
-                        int result1 = Integer.valueOf(dbExerData[0])+ Integer.valueOf(dbExerData[1]) + Integer.valueOf(dbExerData[2]);
-                        int result2 = Integer.valueOf(dbExerData[3])+ Integer.valueOf(dbExerData[4]) + Integer.valueOf(dbExerData[5]);
-                        int result3 = Integer.valueOf(dbExerData[6])+ Integer.valueOf(dbExerData[7]) + Integer.valueOf(dbExerData[8]);
+                        int result1 = Integer.valueOf(dbExerData[0])+ Integer.valueOf(dbExerData[1]) + Integer.valueOf(dbExerData[2]) + Integer.valueOf(dbExerData[3]);
+                        int result2 = Integer.valueOf(dbExerData[4])+ Integer.valueOf(dbExerData[5]) + Integer.valueOf(dbExerData[6]) + Integer.valueOf(dbExerData[7]);
+                        int result3 = Integer.valueOf(dbExerData[8])+ Integer.valueOf(dbExerData[9]) + Integer.valueOf(dbExerData[10]) + Integer.valueOf(dbExerData[11]);
 
                         editor.putString("0_total", String.valueOf(result1)); // total
                         editor.putString("-1_total",String.valueOf(result2)); // -1 day

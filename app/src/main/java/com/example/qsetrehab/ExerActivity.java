@@ -65,6 +65,10 @@ public class ExerActivity extends AppCompatActivity {
     private String msg;
     private String subj_id;
 
+    double upperLimit;
+    double lowerLimit;
+    double accelChoice;
+
     private URL Url;
     private String strUrl;
     private String strDate;
@@ -125,7 +129,7 @@ public class ExerActivity extends AppCompatActivity {
 
         if(subj_id == null || subj_id =="")
         {
-            showToast("ID 를 지정해주세요");
+            showToast("Record 를 눌러 ID 를 지정해주세요");
             finish();
         }
 
@@ -147,6 +151,11 @@ public class ExerActivity extends AppCompatActivity {
                 exCount = "0";
         } else if(whichExer.equals("2")) {
             exCount = exer_count.getString("exer3", null);
+            exeDate = exer_count.getString("exerDate", null);
+            if (exCount == null)
+                exCount = "0";
+        } else if(whichExer.equals("3")) {
+            exCount = exer_count.getString("exer4", null);
             exeDate = exer_count.getString("exerDate", null);
             if (exCount == null)
                 exCount = "0";
@@ -195,6 +204,11 @@ public class ExerActivity extends AppCompatActivity {
                     editor.putString("exerDate",strDate);
                     editor.apply();
                 }
+                else if(whichExer.equals("3")) {
+                    editor.putString("exer4",String.valueOf(exerCount+prevCount));
+                    editor.putString("exerDate",strDate);
+                    editor.apply();
+                }
                 finish();
             }
         });
@@ -232,6 +246,8 @@ public class ExerActivity extends AppCompatActivity {
             pieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
         if(whichExer.equals("2"))
             pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+        if(whichExer.equals("3"))
+            pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
         pieData.setValueTextSize(30f);
         pieData.setValueTextColor(Color.WHITE);
@@ -338,9 +354,34 @@ public class ExerActivity extends AppCompatActivity {
     }
 
     private void displayIMUSensorMeasurements() {
-
         // get IMU sensor measurements from IMUSession
         final float[] acce_data = mIMUSession.getAcceMeasure();
+        mLabelAccelDataX.setText(String.format(Locale.US, "%.3f", acce_data[0]));
+        mLabelAccelDataY.setText(String.format(Locale.US, "%.3f", acce_data[1]));
+        mLabelAccelDataZ.setText(String.format(Locale.US, "%.3f", acce_data[2]));
+
+        switch(whichExer) {
+            case "0":
+                accelChoice = acce_data[1];
+                upperLimit = 4.5;
+                lowerLimit = 3.5;
+                break;
+            case "1":
+                accelChoice = acce_data[1];
+                upperLimit = 4.5;
+                lowerLimit = 3.5;
+                break;
+            case "2":
+                accelChoice = acce_data[2];
+                upperLimit = 4.0;
+                lowerLimit = 3.0;
+                break;
+            case "3":
+                accelChoice = acce_data[2];
+                upperLimit = 3.5;
+                lowerLimit = 2.5;
+                break;
+        }
 
 /*        final float[] gyro_data = mIMUSession.getGyroMeasure();
         final float[] gyro_bias = mIMUSession.getGyroBias();
@@ -352,12 +393,9 @@ public class ExerActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mLabelAccelDataX.setText(String.format(Locale.US, "%.3f", acce_data[0]));
-                mLabelAccelDataY.setText(String.format(Locale.US, "%.3f", acce_data[1]));
-                mLabelAccelDataZ.setText(String.format(Locale.US, "%.3f", acce_data[2]));
 
                 // 완전히 펴고
-                if(Math.ceil(acce_data[1]) < 3.5) {
+                if(Math.ceil(accelChoice) < lowerLimit) {
                     if(trigger == 1) {
                         exerCount = exerCount + 1;
                         upCount = true;
@@ -366,7 +404,7 @@ public class ExerActivity extends AppCompatActivity {
                     }
                 }
                 // 완전히 구부리고
-                else if(Math.ceil(acce_data[1]) >= 4.5){
+                else if(Math.ceil(accelChoice) >= upperLimit){
                     if(trigger == -1) {
                         trigger = 1;
                     }
@@ -392,11 +430,13 @@ public class ExerActivity extends AppCompatActivity {
                 try {
                     if(upCount) {
                         if (whichExer.equals("0")) {
-                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&q_set=" + String.valueOf(exerCount + prevCount) + "&q_walk=0&side_walk=0";
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&q_set=" + String.valueOf(exerCount + prevCount) + "&q_walk=0&side_walk=0&squat=0";
                         } else if (whichExer.equals("1")) {
-                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&q_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&side_walk=0";
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&q_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&side_walk=0&squat=0";
                         } else if (whichExer.equals("2")) {
-                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&side_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&q_walk=0";
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&side_walk=" + String.valueOf(exerCount + prevCount) + "&q_set=0&q_walk=0&squat=0";
+                        } else if (whichExer.equals("3")) {
+                            strUrl = "http://203.252.230.222/insertExerData.php?subj_id="+subj_id+"&squat=" + String.valueOf(exerCount + prevCount) + "&q_set=0&q_walk=0&side_walk=0";
                         }
 
                         Url = new URL(strUrl);  // URL화 한다.
@@ -451,6 +491,11 @@ public class ExerActivity extends AppCompatActivity {
             editor.putString("exerDate",strDate);
             editor.apply();
         }
+        else if(whichExer.equals("3")) {
+            editor.putString("exer4",String.valueOf(exerCount+prevCount));
+            editor.putString("exerDate",strDate);
+            editor.apply();
+        }
 
         finish();
     }
@@ -473,6 +518,10 @@ public class ExerActivity extends AppCompatActivity {
             editor.apply();
         } else if (whichExer.equals("2")) {
             editor.putString("exer3", String.valueOf(exerCount + prevCount));
+            editor.putString("exerDate", strDate);
+            editor.apply();
+        } else if (whichExer.equals("3")) {
+            editor.putString("exer4", String.valueOf(exerCount + prevCount));
             editor.putString("exerDate", strDate);
             editor.apply();
         }
