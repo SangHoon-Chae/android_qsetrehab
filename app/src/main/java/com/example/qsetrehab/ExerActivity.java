@@ -357,16 +357,16 @@ public class ExerActivity extends AppCompatActivity {
                 mLabelAccelDataZ.setText(String.format(Locale.US, "%.3f", acce_data[2]));
 
                 // 완전히 펴고
-                if(Math.ceil(acce_data[2]) < 2) {
+                if(Math.ceil(acce_data[1]) < 3.5) {
                     if(trigger == 1) {
                         exerCount = exerCount + 1;
                         upCount = true;
-                        showPiechart(prevCount, exerCount);
+ //                       showPiechart(prevCount, exerCount);
                         trigger = -1;
                     }
                 }
                 // 완전히 구부리고
-                else if(Math.ceil(acce_data[2]) >= 6){
+                else if(Math.ceil(acce_data[1]) >= 4.5){
                     if(trigger == -1) {
                         trigger = 1;
                     }
@@ -376,7 +376,7 @@ public class ExerActivity extends AppCompatActivity {
         });
 
         // determine display update rate (100 ms)
-        final long displayInterval = 150;
+        final long displayInterval = 100;
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {

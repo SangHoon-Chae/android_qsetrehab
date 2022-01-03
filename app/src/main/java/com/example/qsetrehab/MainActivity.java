@@ -333,12 +333,12 @@ public class MainActivity extends AppCompatActivity {
         barChart.setMaxVisibleValueCount(50);
         barChart.setAutoScaleMinMaxEnabled(false);
         barChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
-        barChart.getAxisLeft().setAxisMaxValue(300);
+        barChart.getAxisLeft().setAxisMaxValue(1000);
         LimitLine ll1;
-        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) < 150) {
-            ll1 = new LimitLine(150f, "목표 수치");
+        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) < 600) {
+            ll1 = new LimitLine(600f, "목표 수치");
         } else {
-            ll1 = new LimitLine(150f, "목표 달성");
+            ll1 = new LimitLine(600f, "목표 달성");
         }
 
         ll1.setLineWidth(4f);
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
         BarData data = new BarData (depenses);
 
         barChart.getAxisRight().setEnabled(false);
-        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) > 150) {
+        if(Integer.valueOf(exer1) + Integer.valueOf(exer2) + Integer.valueOf(exer3) > 600) {
             depenses.setColors(ColorTemplate.JOYFUL_COLORS);
         }
         else
