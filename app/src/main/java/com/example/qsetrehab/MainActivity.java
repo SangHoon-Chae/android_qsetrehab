@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     String exer1;  //Q-set
     String exer2;  //Walk
     String exer3;  //Crab-walk
+    String exer4;  //Squat
     String exerDate;   //오늘
     String exerDate2;  //어제
     String exerDate3;  //그저께
@@ -122,14 +123,16 @@ public class MainActivity extends AppCompatActivity {
         titles.add("Q-set");
         titles.add("Q-Walk");
         titles.add("Side-Walk");
+        titles.add("Squat");
 
         images.add(R.drawable.exer1);
         images.add(R.drawable.exer2);
         images.add(R.drawable.exer3);
+        images.add(R.drawable.exer4);
 
         adapter = new Adapter(this, titles, images);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
         exerList.setLayoutManager(gridLayoutManager);
         exerList.setAdapter(adapter);
 
