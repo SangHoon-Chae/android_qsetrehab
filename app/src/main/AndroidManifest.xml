@@ -41,6 +41,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ExerActivity" />
         <activity android:name=".Note" />
+        <activity android:name=".EduVideo" />
+        <activity android:name=".EduVideoSelect" />
+        <activity android:name=".SecondVideoActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
