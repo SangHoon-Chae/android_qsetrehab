@@ -1,8 +1,5 @@
 package com.example.qsetrehab;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
-import android.bluetooth.le.AdvertisingSetParameters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,12 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,31 +31,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Callable;
-
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.methods.HttpGet;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-import static io.reactivex.Completable.fromCallable;
 
 public class MainActivity extends AppCompatActivity {
     String exer1;  //Q-set
@@ -415,11 +389,12 @@ public class MainActivity extends AppCompatActivity {
 //                        getSupportFragmentManager().beginTransaction().replace(R.id.container, pinkFragment).commit();
                         return true;
                     case R.id.second_tab:
-                        Toast.makeText(getApplicationContext(), "Video_instruction_Under Construction", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, EduVideoSelect.class);
+                        startActivity(intent);
                         return true;
                     case R.id.third_tab:
-                        Intent intent = new Intent(MainActivity.this, Note.class);
-                        startActivity(intent);
+                        Intent intent2 = new Intent(MainActivity.this, Note.class);
+                        startActivity(intent2);
                         return true;
                     case R.id.fourth_tab:
                         Toast.makeText(getApplicationContext(), "Rank_service_Under Construction", Toast.LENGTH_SHORT).show();

@@ -1,6 +1,7 @@
 package com.example.qsetrehab;
 
-import android.app.Activity;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,18 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
@@ -90,7 +84,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             });
         }
 
-        public void exer_setting(int type){
+        private void exer_setting(int type){
             SharedPreferences exer_type = itemView.getContext().getSharedPreferences("exer_type", MODE_PRIVATE);
             SharedPreferences.Editor editor = exer_type.edit();
 

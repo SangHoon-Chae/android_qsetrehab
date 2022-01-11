@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -61,6 +62,7 @@ public class ExerActivity extends AppCompatActivity {
 
     private final static String LOG_TAG = ExerActivity.class.getName();
     private SimpleSocket socket;
+    private MyFileManager fileManager;
 
     private String msg;
     private String subj_id;
@@ -118,6 +120,14 @@ public class ExerActivity extends AppCompatActivity {
         // Initialize screen labels and buttons
         initializeViews();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        fileManager = new MyFileManager();
+        fileManager.initialize();
+
+        fileManager.fileName ="123.txt";
+
+        fileManager.addStringToFile("123456");
+
 
         //subj_id by sharedpreference
         SharedPreferences subj_Data = getSharedPreferences("subject_information", MODE_PRIVATE);
