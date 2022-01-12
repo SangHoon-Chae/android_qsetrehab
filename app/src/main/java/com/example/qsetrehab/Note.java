@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -18,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,11 +38,15 @@ import com.gun0912.tedpermission.normal.TedPermission;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -52,6 +58,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -60,7 +74,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Administrator on 2017-08-08.
  */
-public class Note extends AppCompatActivity {
+public class    Note extends AppCompatActivity {
     private RatingBar ratingBar;
     private RatingBar ratingQolBar;
     private Button saveData;
@@ -85,6 +99,8 @@ public class Note extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 672;
     private String imageFilePath;
     private Uri photoUri;
+    String image = "";
+    String subj_id;
 
 
     private URL Url;
@@ -102,7 +118,6 @@ public class Note extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
-
 
         // 사진 저장 후 미디어 스캐닝을 돌려줘야 갤러리에 반영됨.
         mMediaScanner = MediaScanner.getInstance(getApplicationContext());
@@ -139,6 +154,14 @@ public class Note extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.save_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                httpPostData();
+            }
+        });
+
+
         addListenerOnButton();
         gender = -1;
 
@@ -174,6 +197,8 @@ public class Note extends AppCompatActivity {
 
         SharedPreferences patientData = getSharedPreferences("subject_information", MODE_PRIVATE);
 
+        subj_id = patientData.getString("id", null);
+
         idEdit.setText(patientData.getString("id", null));
         nameEdit.setText(patientData.getString("name", null));
         birth_dateEdit.setText(patientData.getString("birth_date", null));
@@ -189,11 +214,140 @@ public class Note extends AppCompatActivity {
         }
     }
 
+    private void httpPostData() {
+        try {
+            URL url = new URL ("http://203.252.230.222/setPhoto.php");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
+            //--------------------------
+            //   전송 모드 설정 - 기본적인 설정이다
+            //--------------------------
+            http.setDefaultUseCaches(false);
+            http.setDoInput(true);                         // 서버에서 읽기 모드 지정
+            http.setDoOutput(true);                       // 서버로 쓰기 모드 지정
+            http.setRequestMethod("POST");         // 전송 방식은 POST
+
+            // 서버에게 웹에서 <Form>으로 값이 넘어온 것과 같은 방식으로 처리하라는 걸 알려준다
+            http.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+            //--------------------------
+            //   서버로 값 전송
+            //--------------------------
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("id").append("=").append(subj_id).append("&");                 // php 변수에 값 대입
+            buffer.append("BLOB").append("=").append(image);   // php 변수 앞에 '$' 붙이지 않는다
+
+            OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "EUC-KR");
+            PrintWriter writer = new PrintWriter(outStream);
+            writer.write(buffer.toString());
+            writer.flush();
+
+            /*
+            //--------------------------
+            //   서버에서 전송받기
+            //--------------------------
+            InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "EUC-KR");
+            BufferedReader reader = new BufferedReader(tmp);
+            StringBuilder builder = new StringBuilder();
+            String str;
+            while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것이므로 라인단위로 읽는다
+                builder.append(str + "\n");                     // View에 표시하기 위해 라인 구분자 추가
+            }
+            myResult = builder.toString();                       // 전송결과를 전역 변수에 저장
+            ((TextView)(findViewById(R.id.text_result))).setText(myResult);
+            Toast.makeText(MainActivity.this, "전송 후 결과 받음", 0).show();
+            */
+        } catch (MalformedURLException e) {
+            //
+        } catch (IOException e) {
+            //
+        } // try
+    }
+
+    public static String byteArrayToBinaryString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < b.length; ++i) {
+            sb.append(byteToBinaryString(b[i]));
+        }
+        return sb.toString();
+    }
+
+    public static String byteToBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        } return sb.toString();
+    }
+
+    private Bitmap resize(Bitmap bm) {
+        Configuration config = getResources().getConfiguration();
+
+        if(config.smallestScreenWidthDp > 800)
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+        else if(config.smallestScreenWidthDp >= 600)
+            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
+        else if(config.smallestScreenWidthDp >= 400)
+            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
+        else if(config.smallestScreenWidthDp >= 360)
+            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
+        else
+            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
+
+        return bm;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+
+            bitmap = resize(bitmap);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+            image = byteArrayToBinaryString(bytes);
+/*
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+            image = "&image=" + byteArrayToBinaryString(bytes);
+
+            fromCallable(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    try {
+                        strUrl = "http://203.252.230.222/insertPhoto.php?subj_id="+subj_id+image;
+
+                            Url = new URL(strUrl);  // URL화 한다.
+                            HttpURLConnection conn = (HttpURLConnection) Url.openConnection(); // URL을 연결한 객체 생성.
+                            conn.setRequestMethod("GET"); // get방식 통신
+
+                            //                    InputStream is = conn.getInputStream();        //input스트림 개방
+                            conn.getPermission();
+                            int resCode = conn.getResponseCode();  // connect, send http reuqest, receive htttp request
+                            showToast("데이터 전송 성공.");
+                            System.out.println("code = " + resCode);
+                    } catch (MalformedURLException | ProtocolException exception) {
+                        exception.printStackTrace();
+                        showToast("URL error(Get).");
+                        return false;
+                    } catch (IOException io) {
+                        io.printStackTrace();
+                        showToast("데이터 전송 실패. 인터넷연결을 확인하세요.");
+                        return false;
+                    }
+                    // RxJava does not accept null return value. Null will be treated as a failure.
+                    // So just make it return true.
+                    return true;
+                }
+            })
+                    .subscribeOn(Schedulers.io())
+                    // report or post the result to main thread.
+                    .observeOn(AndroidSchedulers.mainThread())
+                    // execute this RxJava
+                    .subscribe();
+*/
             ExifInterface exif = null;
             try {
                 exif = new ExifInterface(imageFilePath);
