@@ -2,6 +2,7 @@ package com.example.qsetrehab;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static io.reactivex.Completable.fromCallable;
+import static java.security.AccessController.getContext;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -11,13 +12,16 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.net.http.RequestQueue;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +36,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
 import com.gun0912.tedpermission.PermissionBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
@@ -82,7 +87,6 @@ public class    Note extends AppCompatActivity {
     private Button clearData;
     private String vasRate;
     private String qolRate;
-    private TextView txtRatingValue;
     private int gender;
 //    public  MyFileManager myFileManager;
     public String message;
@@ -148,7 +152,6 @@ public class    Note extends AppCompatActivity {
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                     }
                     startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-
                 }
 
             }
@@ -214,70 +217,63 @@ public class    Note extends AppCompatActivity {
         }
     }
 
-    private void httpPostData() {
-        try {
-            URL url = new URL ("http://203.252.230.222/setPhoto.php");
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
-            //--------------------------
-            //   전송 모드 설정 - 기본적인 설정이다
-            //--------------------------
-            http.setDefaultUseCaches(false);
-            http.setDoInput(true);                         // 서버에서 읽기 모드 지정
-            http.setDoOutput(true);                       // 서버로 쓰기 모드 지정
-            http.setRequestMethod("POST");         // 전송 방식은 POST
+    private void httpPostData()  {
+        new Thread ()
+        {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("http://203.252.230.222/setPhoto.php");
+                    HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
+                    //--------------------------
+                    //   전송 모드 설정 - 기본적인 설정이다
+                    //--------------------------
+                    http.setDefaultUseCaches(false);
+                    http.setDoInput(true);                         // 서버에서 읽기 모드 지정
+                    http.setDoOutput(true);                       // 서버로 쓰기 모드 지정
+                    http.setRequestMethod("POST");         // 전송 방식은 POST
+                    http.getPermission();
 
-            // 서버에게 웹에서 <Form>으로 값이 넘어온 것과 같은 방식으로 처리하라는 걸 알려준다
-            http.setRequestProperty("content-type", "application/x-www-form-urlencoded");
-            //--------------------------
-            //   서버로 값 전송
-            //--------------------------
-            StringBuffer buffer = new StringBuffer();
-            buffer.append("id").append("=").append(subj_id).append("&");                 // php 변수에 값 대입
-            buffer.append("BLOB").append("=").append(image);   // php 변수 앞에 '$' 붙이지 않는다
+                    // 서버에게 웹에서 <Form>으로 값이 넘어온 것과 같은 방식으로 처리하라는 걸 알려준다
+                    http.setRequestProperty("content-type", "application/x-www-form-urlencoded");
 
-            OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "EUC-KR");
-            PrintWriter writer = new PrintWriter(outStream);
-            writer.write(buffer.toString());
-            writer.flush();
+                    //--------------------------
+                    //   서버로 값 전송
+                    //--------------------------
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("id").append("=").append(subj_id).append("&");                 // php 변수에 값 대입
+                    buffer.append("BLOB").append("=").append(image);   // php 변수 앞에 '$' 붙이지 않는다
 
-            /*
-            //--------------------------
-            //   서버에서 전송받기
-            //--------------------------
-            InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "EUC-KR");
-            BufferedReader reader = new BufferedReader(tmp);
-            StringBuilder builder = new StringBuilder();
-            String str;
-            while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것이므로 라인단위로 읽는다
-                builder.append(str + "\n");                     // View에 표시하기 위해 라인 구분자 추가
+                    OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "EUC-KR");
+                    PrintWriter writer = new PrintWriter(outStream);
+                    writer.write(buffer.toString());
+                    int resCode = http.getResponseCode();
+                    writer.flush();
+
+                    /*
+                    //--------------------------
+                    //   서버에서 전송받기
+                    //--------------------------
+                    InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "EUC-KR");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuilder builder = new StringBuilder();
+                    String str;
+                    while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것이므로 라인단위로 읽는다
+                        builder.append(str + "\n");                     // View에 표시하기 위해 라인 구분자 추가
+                    }
+                    myResult = builder.toString();                       // 전송결과를 전역 변수에 저장
+                    ((TextView)(findViewById(R.id.text_result))).setText(myResult);
+                    Toast.makeText(MainActivity.this, "전송 후 결과 받음", 0).show();
+                    */
+                } catch (MalformedURLException e) {
+                    //
+                } catch (IOException e) {
+                    //
+                } // try
             }
-            myResult = builder.toString();                       // 전송결과를 전역 변수에 저장
-            ((TextView)(findViewById(R.id.text_result))).setText(myResult);
-            Toast.makeText(MainActivity.this, "전송 후 결과 받음", 0).show();
-            */
-        } catch (MalformedURLException e) {
-            //
-        } catch (IOException e) {
-            //
-        } // try
+        }.start();
     }
 
-    public static String byteArrayToBinaryString(byte[] b) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < b.length; ++i) {
-            sb.append(byteToBinaryString(b[i]));
-        }
-        return sb.toString();
-    }
-
-    public static String byteToBinaryString(byte n) {
-        StringBuilder sb = new StringBuilder("00000000");
-        for (int bit = 0; bit < 8; bit++) {
-            if (((n >> bit) & 1) > 0) {
-                sb.setCharAt(7 - bit, '1');
-            }
-        } return sb.toString();
-    }
 
     private Bitmap resize(Bitmap bm) {
         Configuration config = getResources().getConfiguration();
@@ -299,7 +295,25 @@ public class    Note extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+//        ImageView imageView = findViewById(R.id.cv_picture);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+/*
+            try {
+//                Uri uri = data.getData();
+                Glide.with(getApplicationContext()).load(photoUri).into(imageView);
+
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+                bitmap = resize(bitmap);
+
+                String image = bitmapToByteArray(bitmap);
+                changeProfileImageToDB(image);
+
+            } catch (Exception e) {
+
+            }
+        } else if (resultCode== RESULT_CANCELED);
+
             Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
 
             bitmap = resize(bitmap);
@@ -307,12 +321,14 @@ public class    Note extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] bytes = baos.toByteArray();
             image = byteArrayToBinaryString(bytes);
-/*
+*/
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+            bitmap = resize(bitmap);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] bytes = baos.toByteArray();
-            image = "&image=" + byteArrayToBinaryString(bytes);
-
+            image = byteArrayToBinaryString(bytes);
+/*
             fromCallable(new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
@@ -406,9 +422,44 @@ public class    Note extends AppCompatActivity {
             // 이미지 뷰에 비트맵을 set하여 이미지 표현
             ((ImageView) findViewById(R.id.cv_picture)).setImageBitmap(rotate(bitmap, exifDegree));
         }
+    }
+
+    public static String bitmapToByteArray(Bitmap bitmap) {
+        String image = "";
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        image = "&image=" + byteArrayToBinaryString(byteArray);
+        return image;
+    }
+
+    public static String byteArrayToBinaryString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < b.length; ++i) {
+            sb.append(byteToBinaryString(b[i]));
+        }
+        return sb.toString();
+    }
+
+    public static String byteToBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        } return sb.toString();
+    }
+
+    /*
+    public void changeProfileImageToDB(String image) {
+//        Response.Listener<String> responseListener = new Response.Listener<String>(){
+
+        Profile_Img_Check profile_img_check = new Profile_Img_Check(id, image, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
 
 
     }
+*/
     private int exifOrientationToDegree(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;
