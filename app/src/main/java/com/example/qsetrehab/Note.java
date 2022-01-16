@@ -37,7 +37,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.bumptech.glide.Glide;
 import com.gun0912.tedpermission.PermissionBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
@@ -57,6 +56,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,6 +105,7 @@ public class    Note extends AppCompatActivity {
     private String imageFilePath;
     private Uri photoUri;
     String image = "";
+    String imageURL=  "";
     String subj_id;
 
 
@@ -243,7 +244,7 @@ public class    Note extends AppCompatActivity {
                     //--------------------------
                     StringBuffer buffer = new StringBuffer();
                     buffer.append("id").append("=").append(subj_id).append("&");                 // php 변수에 값 대입
-                    buffer.append("BLOB").append("=").append(image);   // php 변수 앞에 '$' 붙이지 않는다
+                    buffer.append("BLOB").append("=").append(imageURL);   // php 변수 앞에 '$' 붙이지 않는다
 
                     OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "EUC-KR");
                     PrintWriter writer = new PrintWriter(outStream);
@@ -326,9 +327,14 @@ public class    Note extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
             bitmap = resize(bitmap);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] bytes = baos.toByteArray();
             image = Base64.encodeToString(bytes, Base64.DEFAULT);
+            try {
+                imageURL = URLEncoder.encode(image,"utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 //            image = byteArrayToBinaryString(bytes);
 /*
             fromCallable(new Callable<Boolean>() {
