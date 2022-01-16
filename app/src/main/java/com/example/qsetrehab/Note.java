@@ -435,7 +435,7 @@ public class    Note extends AppCompatActivity {
     public static String bitmapToByteArray(Bitmap bitmap) {
         String image = "";
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         image = "&image=" + byteArrayToBinaryString(byteArray);
         return image;
@@ -491,7 +491,7 @@ public class    Note extends AppCompatActivity {
         File storageDir = getExternalFilesDir(DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
-                ".jpg",
+                ".png",
                 storageDir
         );
         imageFilePath = image.getAbsolutePath();
