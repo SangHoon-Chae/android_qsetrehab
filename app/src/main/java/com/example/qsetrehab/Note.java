@@ -80,7 +80,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Administrator on 2017-08-08.
  */
-public class    Note extends AppCompatActivity {
+public class Note extends AppCompatActivity {
     private RatingBar ratingBar;
     private RatingBar ratingQolBar;
     private Button saveData;
@@ -283,13 +283,17 @@ public class    Note extends AppCompatActivity {
         if(config.smallestScreenWidthDp > 800)
             bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
         else if(config.smallestScreenWidthDp >= 600)
-            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+//            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
         else if(config.smallestScreenWidthDp >= 400)
-            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+//            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
         else if(config.smallestScreenWidthDp >= 360)
-            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+//            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
         else
-            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+//            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
 
         return bm;
     }
@@ -323,18 +327,7 @@ public class    Note extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] bytes = baos.toByteArray();
             image = byteArrayToBinaryString(bytes);
-*/
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
-            bitmap = resize(bitmap);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            image = Base64.encodeToString(bytes, Base64.DEFAULT);
-            try {
-                imageURL = URLEncoder.encode(image,"utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+
 //            image = byteArrayToBinaryString(bytes);
 /*
             fromCallable(new Callable<Boolean>() {
@@ -410,9 +403,22 @@ public class    Note extends AppCompatActivity {
                 result = "Save Error fOut";
             }
 
-            // 비트맵 사진 폴더 경로에 저장
-            rotate(bitmap,exifDegree).compress(Bitmap.CompressFormat.PNG, 70, fOut);
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+            bitmap = resize(rotate(bitmap,exifDegree));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
 
+
+            // 비트맵 사진 폴더 경로에 저장
+            bitmap.compress(Bitmap.CompressFormat.PNG, 70, fOut);
+
+            byte[] bytes = baos.toByteArray();
+            image = Base64.encodeToString(bytes, Base64.DEFAULT);
+            try {
+                imageURL = URLEncoder.encode(image,"utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             try {
                 fOut.flush();
             } catch (IOException e) {
@@ -428,7 +434,7 @@ public class    Note extends AppCompatActivity {
             }
 
             // 이미지 뷰에 비트맵을 set하여 이미지 표현
-            ((ImageView) findViewById(R.id.cv_picture)).setImageBitmap(rotate(bitmap, exifDegree));
+            ((ImageView) findViewById(R.id.cv_picture)).setImageBitmap(bitmap);
         }
     }
 
