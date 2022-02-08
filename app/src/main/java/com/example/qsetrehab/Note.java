@@ -103,11 +103,11 @@ public class Note extends AppCompatActivity {
     // 카메라 변수
     private static final int REQUEST_IMAGE_CAPTURE = 672;
     private String imageFilePath;
+    private String prevImagePath;
     private Uri photoUri;
     String image = "";
     String imageURL=  "";
     String subj_id;
-
 
     private URL Url;
     private String strUrl;
@@ -162,10 +162,16 @@ public class Note extends AppCompatActivity {
         findViewById(R.id.save_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SharedPreferences photoPath = getSharedPreferences("subject_information", MODE_PRIVATE);
+                SharedPreferences.Editor editor = photoPath.edit();
+
+                editor.putString("photoPath", imageFilePath);
+                editor.apply();
+
                 httpPostData();
             }
         });
-
 
         addListenerOnButton();
         gender = -1;
@@ -203,7 +209,6 @@ public class Note extends AppCompatActivity {
         SharedPreferences patientData = getSharedPreferences("subject_information", MODE_PRIVATE);
 
         subj_id = patientData.getString("id", null);
-
         idEdit.setText(patientData.getString("id", null));
         nameEdit.setText(patientData.getString("name", null));
         birth_dateEdit.setText(patientData.getString("birth_date", null));
@@ -213,6 +218,33 @@ public class Note extends AppCompatActivity {
         name = nameEdit.getText().toString();
         birth_date =  birth_dateEdit.getText().toString();
         group = groupEdit.getText().toString();
+
+        //PhotoView 가져오기
+        prevImagePath = patientData.getString("photoPath", null);
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(prevImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int exifOrientation;
+        int exifDegree;
+
+        if (exif != null) {
+            exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            exifDegree = exifOrientationToDegree(exifOrientation);
+        } else {
+            exifDegree = 0;
+        }
+
+        File imgFile = new File(prevImagePath);
+
+        if(imgFile.exists()) {
+            Bitmap myBitmap= BitmapFactory.decodeFile(prevImagePath);
+            ((ImageView) findViewById(R.id.cv_picture)).setImageBitmap(rotate(myBitmap, exifDegree));
+        }
 
         if (shouldAskPermissions()) {
             askPermissions();
